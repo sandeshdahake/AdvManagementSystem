@@ -2,6 +2,8 @@
 This application was generated using JHipster 4.13.0, you can find documentation and help at [http://www.jhipster.tech/documentation-archive/v4.13.0](http://www.jhipster.tech/documentation-archive/v4.13.0).
 
 ## Development
+Use this cmd to run jhipster globally 
+export PATH="$PATH:$(yarn global bin):$HOME/.config/yarn/global/node_modules/.bin"
 
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
