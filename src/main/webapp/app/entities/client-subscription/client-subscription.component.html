@@ -1,0 +1,96 @@
+<div>
+    <h2>
+        <span>Client Subscriptions</span>
+        <button class="btn btn-primary float-right jh-create-entity create-client-subscription" [routerLink]="['/', { outlets: { popup: ['client-subscription-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Client Subscription
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="clientSubscriptions">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="startDate"><span>Start Date</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="endDate"><span>End Date</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="link"><span>Link</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="priorityPrice"><span>Priority Price</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="discount"><span>Discount</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="totalPrice"><span>Total Price</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="activeSubscription"><span>Active Subscription</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="cityCityName"><span>City</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="clientClientName"><span>Client</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="subscriptionPlanPlanName"><span>Subscription Plan</span> <span class="fa fa-sort"></span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let clientSubscription of clientSubscriptions ;trackBy: trackId">
+                <td><a [routerLink]="['../client-subscription', clientSubscription.id ]">{{clientSubscription.id}}</a></td>
+                <td>{{clientSubscription.startDate | date:'mediumDate'}}</td>
+                <td>{{clientSubscription.endDate | date:'mediumDate'}}</td>
+                <td>{{clientSubscription.link}}</td>
+                <td>{{clientSubscription.priorityPrice}}</td>
+                <td>{{clientSubscription.discount}}</td>
+                <td>{{clientSubscription.totalPrice}}</td>
+                <td>{{clientSubscription.activeSubscription}}</td>
+                <td>
+                    <div *ngIf="clientSubscription.cityId">
+                        <a [routerLink]="['../city', clientSubscription.cityId  ]" >{{clientSubscription.cityCityName}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="clientSubscription.clientId">
+                        <a [routerLink]="['../client', clientSubscription.clientId  ]" >{{clientSubscription.clientClientName}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="clientSubscription.subscriptionPlanId">
+                        <a [routerLink]="['../subscription-plan', clientSubscription.subscriptionPlanId  ]" >{{clientSubscription.subscriptionPlanPlanName}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../client-subscription', clientSubscription.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'client-subscription/'+ clientSubscription.id + '/edit'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'client-subscription/'+ clientSubscription.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="clientSubscriptions && clientSubscriptions.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

@@ -41,6 +41,26 @@ public class CacheConfiguration {
             cm.createCache(com.ams.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(com.ams.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(com.ams.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            cm.createCache(com.ams.domain.Client.class.getName(), jcacheConfiguration);
+            cm.createCache(com.ams.domain.Client.class.getName() + ".cities", jcacheConfiguration);
+            cm.createCache(com.ams.domain.Client.class.getName() + ".subscriptions", jcacheConfiguration);
+            cm.createCache(com.ams.domain.City.class.getName(), jcacheConfiguration);
+            cm.createCache(com.ams.domain.City.class.getName() + ".subscriptionPlans", jcacheConfiguration);
+            cm.createCache(com.ams.domain.City.class.getName() + ".subscriptions", jcacheConfiguration);
+            cm.createCache(com.ams.domain.City.class.getName() + ".clientNames", jcacheConfiguration);
+            cm.createCache(com.ams.domain.BannerType.class.getName(), jcacheConfiguration);
+            cm.createCache(com.ams.domain.BannerType.class.getName() + ".subscriptionPlans", jcacheConfiguration);
+            cm.createCache(com.ams.domain.BannerSize.class.getName(), jcacheConfiguration);
+            cm.createCache(com.ams.domain.BannerSize.class.getName() + ".subscriptionPlans", jcacheConfiguration);
+            cm.createCache(com.ams.domain.BannerPage.class.getName(), jcacheConfiguration);
+            cm.createCache(com.ams.domain.BannerPage.class.getName() + ".subscriptionPlans", jcacheConfiguration);
+            cm.createCache(com.ams.domain.BannerLocation.class.getName(), jcacheConfiguration);
+            cm.createCache(com.ams.domain.BannerLocation.class.getName() + ".subscriptionPlans", jcacheConfiguration);
+            cm.createCache(com.ams.domain.SubscriptionPeriod.class.getName(), jcacheConfiguration);
+            cm.createCache(com.ams.domain.SubscriptionPeriod.class.getName() + ".subscriptionPlans", jcacheConfiguration);
+            cm.createCache(com.ams.domain.SubscriptionPlan.class.getName(), jcacheConfiguration);
+            cm.createCache(com.ams.domain.SubscriptionPlan.class.getName() + ".subscriptions", jcacheConfiguration);
+            cm.createCache(com.ams.domain.ClientSubscription.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

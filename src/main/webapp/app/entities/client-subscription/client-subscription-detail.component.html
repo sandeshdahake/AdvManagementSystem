@@ -1,0 +1,68 @@
+
+<div *ngIf="clientSubscription">
+    <h2><span>Client Subscription</span> {{clientSubscription.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Start Date</span></dt>
+        <dd>
+            <span>{{clientSubscription.startDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>End Date</span></dt>
+        <dd>
+            <span>{{clientSubscription.endDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Link</span></dt>
+        <dd>
+            <span>{{clientSubscription.link}}</span>
+        </dd>
+        <dt><span>Priority Price</span></dt>
+        <dd>
+            <span>{{clientSubscription.priorityPrice}}</span>
+        </dd>
+        <dt><span>Discount</span></dt>
+        <dd>
+            <span>{{clientSubscription.discount}}</span>
+        </dd>
+        <dt><span>Total Price</span></dt>
+        <dd>
+            <span>{{clientSubscription.totalPrice}}</span>
+        </dd>
+        <dt><span>Active Subscription</span></dt>
+        <dd>
+            <span>{{clientSubscription.activeSubscription}}</span>
+        </dd>
+        <dt><span>City</span></dt>
+        <dd>
+            <div *ngIf="clientSubscription.cityId">
+                <a [routerLink]="['/city', clientSubscription.cityId]">{{clientSubscription.cityCityName}}</a>
+            </div>
+        </dd>
+        <dt><span>Client</span></dt>
+        <dd>
+            <div *ngIf="clientSubscription.clientId">
+                <a [routerLink]="['/client', clientSubscription.clientId]">{{clientSubscription.clientClientName}}</a>
+            </div>
+        </dd>
+        <dt><span>Subscription Plan</span></dt>
+        <dd>
+            <div *ngIf="clientSubscription.subscriptionPlanId">
+                <a [routerLink]="['/subscription-plan', clientSubscription.subscriptionPlanId]">{{clientSubscription.subscriptionPlanPlanName}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'client-subscription/'+ clientSubscription.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

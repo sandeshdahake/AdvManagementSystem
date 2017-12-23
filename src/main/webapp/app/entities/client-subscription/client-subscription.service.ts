@@ -1,0 +1,83 @@
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+import { SERVER_API_URL } from '../../app.constants';
+
+import { JhiDateUtils } from 'ng-jhipster';
+
+import { ClientSubscription } from './client-subscription.model';
+import { ResponseWrapper, createRequestOption } from '../../shared';
+
+@Injectable()
+export class ClientSubscriptionService {
+
+    private resourceUrl = SERVER_API_URL + 'api/client-subscriptions';
+
+    constructor(private http: Http, private dateUtils: JhiDateUtils) { }
+
+    create(clientSubscription: ClientSubscription): Observable<ClientSubscription> {
+        const copy = this.convert(clientSubscription);
+        return this.http.post(this.resourceUrl, copy).map((res: Response) => {
+            const jsonResponse = res.json();
+            return this.convertItemFromServer(jsonResponse);
+        });
+    }
+
+    update(clientSubscription: ClientSubscription): Observable<ClientSubscription> {
+        const copy = this.convert(clientSubscription);
+        return this.http.put(this.resourceUrl, copy).map((res: Response) => {
+            const jsonResponse = res.json();
+            return this.convertItemFromServer(jsonResponse);
+        });
+    }
+
+    find(id: number): Observable<ClientSubscription> {
+        return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
+            const jsonResponse = res.json();
+            return this.convertItemFromServer(jsonResponse);
+        });
+    }
+
+    query(req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.get(this.resourceUrl, options)
+            .map((res: Response) => this.convertResponse(res));
+    }
+
+    delete(id: number): Observable<Response> {
+        return this.http.delete(`${this.resourceUrl}/${id}`);
+    }
+
+    private convertResponse(res: Response): ResponseWrapper {
+        const jsonResponse = res.json();
+        const result = [];
+        for (let i = 0; i < jsonResponse.length; i++) {
+            result.push(this.convertItemFromServer(jsonResponse[i]));
+        }
+        return new ResponseWrapper(res.headers, result, res.status);
+    }
+
+    /**
+     * Convert a returned JSON object to ClientSubscription.
+     */
+    private convertItemFromServer(json: any): ClientSubscription {
+        const entity: ClientSubscription = Object.assign(new ClientSubscription(), json);
+        entity.startDate = this.dateUtils
+            .convertLocalDateFromServer(json.startDate);
+        entity.endDate = this.dateUtils
+            .convertLocalDateFromServer(json.endDate);
+        return entity;
+    }
+
+    /**
+     * Convert a ClientSubscription to a JSON which can be sent to the server.
+     */
+    private convert(clientSubscription: ClientSubscription): ClientSubscription {
+        const copy: ClientSubscription = Object.assign({}, clientSubscription);
+        copy.startDate = this.dateUtils
+            .convertLocalDateToServer(clientSubscription.startDate);
+        copy.endDate = this.dateUtils
+            .convertLocalDateToServer(clientSubscription.endDate);
+        return copy;
+    }
+}

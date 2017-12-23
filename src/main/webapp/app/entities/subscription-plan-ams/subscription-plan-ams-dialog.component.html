@@ -1,0 +1,148 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="mySubscriptionPlanLabel">Create or edit a Subscription Plan</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!subscriptionPlan.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="subscriptionPlan.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_planName">Plan Name</label>
+            <input type="text" class="form-control" name="planName" id="field_planName"
+                [(ngModel)]="subscriptionPlan.planName" required maxlength="200"/>
+            <div [hidden]="!(editForm.controls.planName?.dirty && editForm.controls.planName?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.planName?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.planName?.errors?.maxlength">
+                   This field cannot be longer than 200 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_price">Price</label>
+            <input type="number" class="form-control" name="price" id="field_price"
+                [(ngModel)]="subscriptionPlan.price" required/>
+            <div [hidden]="!(editForm.controls.price?.dirty && editForm.controls.price?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.price?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.price?.errors?.number">
+                    This field should be a number.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_maxSubscription">Max Subscription</label>
+            <input type="number" class="form-control" name="maxSubscription" id="field_maxSubscription"
+                [(ngModel)]="subscriptionPlan.maxSubscription" required/>
+            <div [hidden]="!(editForm.controls.maxSubscription?.dirty && editForm.controls.maxSubscription?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.maxSubscription?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.maxSubscription?.errors?.number">
+                    This field should be a number.
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" for="field_bannerType">Banner Type</label>
+            <select class="form-control" id="field_bannerType" name="bannerType" [(ngModel)]="subscriptionPlan.bannerTypeId"  required>
+                <option *ngIf="!editForm.value.bannerType" [ngValue]="null" selected></option>
+                <option [ngValue]="bannerTypeOption.id" *ngFor="let bannerTypeOption of bannertypes; trackBy: trackBannerTypeById">{{bannerTypeOption.bannerType}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.bannerType?.dirty && editForm.controls.bannerType?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.bannerType?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_bannerSize">Banner Size</label>
+            <select class="form-control" id="field_bannerSize" name="bannerSize" [(ngModel)]="subscriptionPlan.bannerSizeId"  required>
+                <option *ngIf="!editForm.value.bannerSize" [ngValue]="null" selected></option>
+                <option [ngValue]="bannerSizeOption.id" *ngFor="let bannerSizeOption of bannersizes; trackBy: trackBannerSizeById">{{bannerSizeOption.bannerSize}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.bannerSize?.dirty && editForm.controls.bannerSize?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.bannerSize?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_bannerLocation">Banner Location</label>
+            <select class="form-control" id="field_bannerLocation" name="bannerLocation" [(ngModel)]="subscriptionPlan.bannerLocationId"  required>
+                <option *ngIf="!editForm.value.bannerLocation" [ngValue]="null" selected></option>
+                <option [ngValue]="bannerLocationOption.id" *ngFor="let bannerLocationOption of bannerlocations; trackBy: trackBannerLocationById">{{bannerLocationOption.bannerLocation}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.bannerLocation?.dirty && editForm.controls.bannerLocation?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.bannerLocation?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_bannerPage">Banner Page</label>
+            <select class="form-control" id="field_bannerPage" name="bannerPage" [(ngModel)]="subscriptionPlan.bannerPageId"  required>
+                <option *ngIf="!editForm.value.bannerPage" [ngValue]="null" selected></option>
+                <option [ngValue]="bannerPageOption.id" *ngFor="let bannerPageOption of bannerpages; trackBy: trackBannerPageById">{{bannerPageOption.bannerPage}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.bannerPage?.dirty && editForm.controls.bannerPage?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.bannerPage?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_subscriptionPeriod">Subscription Period</label>
+            <select class="form-control" id="field_subscriptionPeriod" name="subscriptionPeriod" [(ngModel)]="subscriptionPlan.subscriptionPeriodId"  required>
+                <option *ngIf="!editForm.value.subscriptionPeriod" [ngValue]="null" selected></option>
+                <option [ngValue]="subscriptionPeriodOption.id" *ngFor="let subscriptionPeriodOption of subscriptionperiods; trackBy: trackSubscriptionPeriodById">{{subscriptionPeriodOption.periodLabel}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.subscriptionPeriod?.dirty && editForm.controls.subscriptionPeriod?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.subscriptionPeriod?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_city">City</label>
+            <select class="form-control" id="field_city" name="city" [(ngModel)]="subscriptionPlan.cityId"  required>
+                <option *ngIf="!editForm.value.city" [ngValue]="null" selected></option>
+                <option [ngValue]="cityOption.id" *ngFor="let cityOption of cities; trackBy: trackCityById">{{cityOption.cityName}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.city?.dirty && editForm.controls.city?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.city?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

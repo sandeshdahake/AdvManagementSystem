@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity SubscriptionPlan.
+    -->
+    <changeSet id="20171223202451-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="banner_type_id"
+                                 baseTableName="subscription_plan"
+                                 constraintName="fk_subscription_plan_banner_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="banner_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="banner_size_id"
+                                 baseTableName="subscription_plan"
+                                 constraintName="fk_subscription_plan_banner_size_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="banner_size"/>
+
+        <addForeignKeyConstraint baseColumnNames="banner_location_id"
+                                 baseTableName="subscription_plan"
+                                 constraintName="fk_subscription_plan_banner_location_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="banner_location"/>
+
+        <addForeignKeyConstraint baseColumnNames="banner_page_id"
+                                 baseTableName="subscription_plan"
+                                 constraintName="fk_subscription_plan_banner_page_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="banner_page"/>
+
+        <addForeignKeyConstraint baseColumnNames="subscription_period_id"
+                                 baseTableName="subscription_plan"
+                                 constraintName="fk_subscription_plan_subscription_period_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="subscription_period"/>
+
+        <addForeignKeyConstraint baseColumnNames="city_id"
+                                 baseTableName="subscription_plan"
+                                 constraintName="fk_subscription_plan_city_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="city"/>
+
+    </changeSet>
+</databaseChangeLog>

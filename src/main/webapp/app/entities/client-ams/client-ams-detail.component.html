@@ -1,0 +1,36 @@
+
+<div *ngIf="client">
+    <h2><span>Client</span> {{client.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Client Name</span></dt>
+        <dd>
+            <span>{{client.clientName}}</span>
+        </dd>
+        <dt><span>Client Address</span></dt>
+        <dd>
+            <span>{{client.clientAddress}}</span>
+        </dd>
+        <dt><span>City</span></dt>
+        <dd>
+            <span *ngFor="let city of client.cities; let last = last">
+                <a [routerLink]="['/city-ams', city?.id ]">{{city.cityName}}</a>{{last ? '' : ', '}}
+            </span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'client-ams/'+ client.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

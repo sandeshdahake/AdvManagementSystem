@@ -1,0 +1,70 @@
+
+<div *ngIf="subscriptionPlan">
+    <h2><span>Subscription Plan</span> {{subscriptionPlan.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Plan Name</span></dt>
+        <dd>
+            <span>{{subscriptionPlan.planName}}</span>
+        </dd>
+        <dt><span>Price</span></dt>
+        <dd>
+            <span>{{subscriptionPlan.price}}</span>
+        </dd>
+        <dt><span>Max Subscription</span></dt>
+        <dd>
+            <span>{{subscriptionPlan.maxSubscription}}</span>
+        </dd>
+        <dt><span>Banner Type</span></dt>
+        <dd>
+            <div *ngIf="subscriptionPlan.bannerTypeId">
+                <a [routerLink]="['/banner-type-ams', subscriptionPlan.bannerTypeId]">{{subscriptionPlan.bannerTypeBannerType}}</a>
+            </div>
+        </dd>
+        <dt><span>Banner Size</span></dt>
+        <dd>
+            <div *ngIf="subscriptionPlan.bannerSizeId">
+                <a [routerLink]="['/banner-size-ams', subscriptionPlan.bannerSizeId]">{{subscriptionPlan.bannerSizeBannerSize}}</a>
+            </div>
+        </dd>
+        <dt><span>Banner Location</span></dt>
+        <dd>
+            <div *ngIf="subscriptionPlan.bannerLocationId">
+                <a [routerLink]="['/banner-location-ams', subscriptionPlan.bannerLocationId]">{{subscriptionPlan.bannerLocationBannerLocation}}</a>
+            </div>
+        </dd>
+        <dt><span>Banner Page</span></dt>
+        <dd>
+            <div *ngIf="subscriptionPlan.bannerPageId">
+                <a [routerLink]="['/banner-page-ams', subscriptionPlan.bannerPageId]">{{subscriptionPlan.bannerPageBannerPage}}</a>
+            </div>
+        </dd>
+        <dt><span>Subscription Period</span></dt>
+        <dd>
+            <div *ngIf="subscriptionPlan.subscriptionPeriodId">
+                <a [routerLink]="['/subscription-period-ams', subscriptionPlan.subscriptionPeriodId]">{{subscriptionPlan.subscriptionPeriodPeriodLabel}}</a>
+            </div>
+        </dd>
+        <dt><span>City</span></dt>
+        <dd>
+            <div *ngIf="subscriptionPlan.cityId">
+                <a [routerLink]="['/city-ams', subscriptionPlan.cityId]">{{subscriptionPlan.cityCityName}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'subscription-plan-ams/'+ subscriptionPlan.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

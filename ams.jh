@@ -1,0 +1,84 @@
+
+
+
+entity Client{
+	clientName String required,
+    clientAddress TextBlob required
+}
+entity City {
+	cityName String required
+}
+entity BannerType{
+	bannerType String required maxlength(200)
+}
+entity BannerSize{
+ bannerSize String required maxlength(200)
+}
+entity BannerPage{
+bannerPage String required maxlength(200)
+}
+entity BannerLocation{
+bannerLocation String required maxlength(200)
+}
+
+entity SubscriptionPeriod{
+ periodLabel String required maxlength(200),
+ subscriptionDays Integer required min(1)
+}
+
+entity SubscriptionPlan{
+ planName String required maxlength(200),
+ price BigDecimal required min(0),
+ maxSubscription Integer required min(0)
+}
+entity ClientSubscription{
+ startDate LocalDate required,
+ endDate LocalDate required,
+ link String required,
+ PriorityPrice BigDecimal min(0),
+ discount BigDecimal min(0),
+ totalPrice BigDecimal required min(0),
+ activeSubscription Boolean required
+}
+
+
+relationship ManyToMany {
+	Client{city(cityName) required} to City{clientName}
+}
+relationship ManyToOne {
+	SubscriptionPlan{bannerType(bannerType) required} to BannerType{subscriptionPlan}
+}
+relationship ManyToOne {
+    SubscriptionPlan{bannerSize(bannerSize) required} to BannerSize{subscriptionPlan}
+}
+relationship ManyToOne {
+    SubscriptionPlan{bannerLocation(bannerLocation) required} to BannerLocation{subscriptionPlan}
+}
+
+relationship ManyToOne {
+    SubscriptionPlan{bannerPage(bannerPage) required} to BannerPage{subscriptionPlan}
+}
+
+relationship ManyToOne {
+    SubscriptionPlan{subscriptionPeriod(periodLabel) required} to SubscriptionPeriod{subscriptionPlan}
+}
+
+relationship ManyToOne {
+    SubscriptionPlan{city(cityName) required} to City{subscriptionPlan}
+}
+
+relationship ManyToOne {
+    ClientSubscription{city(cityName) required} to City{subscription}
+}
+
+relationship ManyToOne {
+    ClientSubscription{client(clientName) required} to Client{subscription}
+}
+
+relationship ManyToOne {
+    ClientSubscription{subscriptionPlan(planName) required} to SubscriptionPlan{subscription}
+}
+dto * with mapstruct
+service * with serviceClass
+paginate * with pagination
+

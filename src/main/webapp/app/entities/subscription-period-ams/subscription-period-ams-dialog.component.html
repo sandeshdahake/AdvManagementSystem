@@ -1,0 +1,59 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="mySubscriptionPeriodLabel">Create or edit a Subscription Period</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!subscriptionPeriod.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="subscriptionPeriod.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_periodLabel">Period Label</label>
+            <input type="text" class="form-control" name="periodLabel" id="field_periodLabel"
+                [(ngModel)]="subscriptionPeriod.periodLabel" required maxlength="200"/>
+            <div [hidden]="!(editForm.controls.periodLabel?.dirty && editForm.controls.periodLabel?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.periodLabel?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.periodLabel?.errors?.maxlength">
+                   This field cannot be longer than 200 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_subscriptionDays">Subscription Days</label>
+            <input type="number" class="form-control" name="subscriptionDays" id="field_subscriptionDays"
+                [(ngModel)]="subscriptionPeriod.subscriptionDays" required min="1"/>
+            <div [hidden]="!(editForm.controls.subscriptionDays?.dirty && editForm.controls.subscriptionDays?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.subscriptionDays?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.subscriptionDays?.errors?.min">
+                    This field should be at least 1.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.subscriptionDays?.errors?.number">
+                    This field should be a number.
+                </small>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>
