@@ -68,7 +68,7 @@ class ClientSubscriptionGatlingTest extends Simulation {
             .exec(http("Create new clientSubscription")
             .post("/api/client-subscriptions")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "startDate":"2020-01-01T00:00:00.000Z", "endDate":"2020-01-01T00:00:00.000Z", "link":"SAMPLE_TEXT", "priorityPrice":"0", "discount":"0", "totalPrice":"0", "activeSubscription":null}""")).asJSON
+            .body(StringBody("""{"id":null, "startDate":"2020-01-01T00:00:00.000Z", "endDate":"2020-01-01T00:00:00.000Z", "resourceUrl":"SAMPLE_TEXT", "redirectUrl":"SAMPLE_TEXT", "priorityPrice":"0", "discount":"0", "totalPrice":"0", "activeSubscription":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_clientSubscription_url"))).exitHereIfFailed
             .pause(10)

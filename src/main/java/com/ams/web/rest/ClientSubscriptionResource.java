@@ -124,4 +124,29 @@ public class ClientSubscriptionResource {
         clientSubscriptionService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * GET  /client-subscriptions/{cityName}/{planName} : get all the clientSubscriptions by city name and plan name.
+     *
+     * @param cityName the city information
+     * @param cityName the city information
+     * @return the ResponseEntity with status 200 (OK) and the list of clientSubscriptions in body
+     */
+    @GetMapping("/client-subscriptions/{cityName}/{planName}")
+    @Timed
+    public ResponseEntity<List<ClientSubscriptionDTO>> getAllClientSubscriptionsForWidget(@PathVariable String cityName, @PathVariable String  planName ) {
+        log.debug("REST request to get a list of  ClientSubscriptions for widgets");
+        List<ClientSubscriptionDTO> list = clientSubscriptionService.findAllByCityByPlan(cityName, planName);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/client-subscriptions/url/{cityName}/{planName}")
+    @Timed
+    public ResponseEntity<List<Object>> findUrlByCityNameByPlanName(@PathVariable String cityName, @PathVariable String  planName ) {
+        log.debug("REST request to get a list of  ClientSubscriptions for widgets");
+        List<Object> list = clientSubscriptionService.findUrlByCityByPlan(cityName, planName);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+
 }

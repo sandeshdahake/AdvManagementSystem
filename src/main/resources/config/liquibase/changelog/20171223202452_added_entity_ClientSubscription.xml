@@ -30,8 +30,12 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="jhi_link" type="varchar(255)">
+            <column name="resource_url" type="varchar(255)">
                 <constraints nullable="false" />
+            </column>
+
+            <column name="redirect_url" type="varchar(255)">
+                <constraints nullable="true" />
             </column>
 
             <column name="priority_price" type="decimal(10,2)">
@@ -64,7 +68,7 @@
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

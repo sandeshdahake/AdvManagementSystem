@@ -19,7 +19,8 @@
             <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="startDate"><span>Start Date</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="endDate"><span>End Date</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="link"><span>Link</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="resourceUrl"><span>Resource Url</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="redirectUrl"><span>Redirect Url</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="priorityPrice"><span>Priority Price</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="discount"><span>Discount</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="totalPrice"><span>Total Price</span> <span class="fa fa-sort"></span></th>
@@ -35,7 +36,8 @@
                 <td><a [routerLink]="['../client-subscription', clientSubscription.id ]">{{clientSubscription.id}}</a></td>
                 <td>{{clientSubscription.startDate | date:'mediumDate'}}</td>
                 <td>{{clientSubscription.endDate | date:'mediumDate'}}</td>
-                <td>{{clientSubscription.link}}</td>
+                <td>{{clientSubscription.resourceUrl}}</td>
+                <td>{{clientSubscription.redirectUrl}}</td>
                 <td>{{clientSubscription.priorityPrice}}</td>
                 <td>{{clientSubscription.discount}}</td>
                 <td>{{clientSubscription.totalPrice}}</td>

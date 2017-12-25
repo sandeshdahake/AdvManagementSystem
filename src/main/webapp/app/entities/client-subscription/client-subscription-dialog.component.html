@@ -45,15 +45,20 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="form-control-label" for="field_link">Link</label>
-            <input type="text" class="form-control" name="link" id="field_link"
-                [(ngModel)]="clientSubscription.link" required/>
-            <div [hidden]="!(editForm.controls.link?.dirty && editForm.controls.link?.invalid)">
+            <label class="form-control-label" for="field_resourceUrl">Resource Url</label>
+            <input type="text" class="form-control" name="resourceUrl" id="field_resourceUrl"
+                [(ngModel)]="clientSubscription.resourceUrl" required/>
+            <div [hidden]="!(editForm.controls.resourceUrl?.dirty && editForm.controls.resourceUrl?.invalid)">
                 <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.link?.errors?.required">
+                   [hidden]="!editForm.controls.resourceUrl?.errors?.required">
                    This field is required.
                 </small>
             </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_redirectUrl">Redirect Url</label>
+            <input type="text" class="form-control" name="redirectUrl" id="field_redirectUrl"
+                [(ngModel)]="clientSubscription.redirectUrl" />
         </div>
         <div class="form-group">
             <label class="form-control-label" for="field_priorityPrice">Priority Price</label>

@@ -35,8 +35,10 @@ describe('ClientSubscription e2e test', () => {
         expect(clientSubscriptionDialogPage.getStartDateInput()).toMatch('2000-12-31');
         clientSubscriptionDialogPage.setEndDateInput('2000-12-31');
         expect(clientSubscriptionDialogPage.getEndDateInput()).toMatch('2000-12-31');
-        clientSubscriptionDialogPage.setLinkInput('link');
-        expect(clientSubscriptionDialogPage.getLinkInput()).toMatch('link');
+        clientSubscriptionDialogPage.setResourceUrlInput('resourceUrl');
+        expect(clientSubscriptionDialogPage.getResourceUrlInput()).toMatch('resourceUrl');
+        clientSubscriptionDialogPage.setRedirectUrlInput('redirectUrl');
+        expect(clientSubscriptionDialogPage.getRedirectUrlInput()).toMatch('redirectUrl');
         clientSubscriptionDialogPage.setPriorityPriceInput('5');
         expect(clientSubscriptionDialogPage.getPriorityPriceInput()).toMatch('5');
         clientSubscriptionDialogPage.setDiscountInput('5');
@@ -83,7 +85,8 @@ export class ClientSubscriptionDialogPage {
     closeButton = element(by.css('button.close'));
     startDateInput = element(by.css('input#field_startDate'));
     endDateInput = element(by.css('input#field_endDate'));
-    linkInput = element(by.css('input#field_link'));
+    resourceUrlInput = element(by.css('input#field_resourceUrl'));
+    redirectUrlInput = element(by.css('input#field_redirectUrl'));
     priorityPriceInput = element(by.css('input#field_priorityPrice'));
     discountInput = element(by.css('input#field_discount'));
     totalPriceInput = element(by.css('input#field_totalPrice'));
@@ -112,12 +115,20 @@ export class ClientSubscriptionDialogPage {
         return this.endDateInput.getAttribute('value');
     }
 
-    setLinkInput = function(link) {
-        this.linkInput.sendKeys(link);
+    setResourceUrlInput = function(resourceUrl) {
+        this.resourceUrlInput.sendKeys(resourceUrl);
     }
 
-    getLinkInput = function() {
-        return this.linkInput.getAttribute('value');
+    getResourceUrlInput = function() {
+        return this.resourceUrlInput.getAttribute('value');
+    }
+
+    setRedirectUrlInput = function(redirectUrl) {
+        this.redirectUrlInput.sendKeys(redirectUrl);
+    }
+
+    getRedirectUrlInput = function() {
+        return this.redirectUrlInput.getAttribute('value');
     }
 
     setPriorityPriceInput = function(priorityPrice) {

@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 /**
  * Service Implementation for managing ClientSubscription.
@@ -77,5 +79,16 @@ public class ClientSubscriptionService {
     public void delete(Long id) {
         log.debug("Request to delete ClientSubscription : {}", id);
         clientSubscriptionRepository.delete(id);
+    }
+
+    public List<ClientSubscriptionDTO> findAllByCityByPlan(String cityName, String planName) {
+        log.debug("Request to get ClientSubscription by city and plan: {}", cityName,planName);
+        return
+            clientSubscriptionMapper.toDto(clientSubscriptionRepository.findAllByCityNameByPlanName(cityName, planName));
+
+    }
+
+    public List<Object> findUrlByCityByPlan(String cityName, String planName) {
+        return clientSubscriptionRepository.findUrlByCityNameByPlanName(cityName, planName);
     }
 }

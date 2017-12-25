@@ -47,7 +47,8 @@ entity SubscriptionPlan{
 entity ClientSubscription{
  startDate LocalDate required,
  endDate LocalDate required,
- link String required,
+ resourceUrl String required,
+ redirectUrl String,
  PriorityPrice BigDecimal min(0),
  discount BigDecimal min(0),
  totalPrice BigDecimal required min(0),

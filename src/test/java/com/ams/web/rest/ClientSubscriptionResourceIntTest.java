@@ -53,8 +53,11 @@ public class ClientSubscriptionResourceIntTest {
     private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
 
-    private static final String DEFAULT_LINK = "AAAAAAAAAA";
-    private static final String UPDATED_LINK = "BBBBBBBBBB";
+    private static final String DEFAULT_RESOURCE_URL = "AAAAAAAAAA";
+    private static final String UPDATED_RESOURCE_URL = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REDIRECT_URL = "AAAAAAAAAA";
+    private static final String UPDATED_REDIRECT_URL = "BBBBBBBBBB";
 
     private static final BigDecimal DEFAULT_PRIORITY_PRICE = new BigDecimal(0);
     private static final BigDecimal UPDATED_PRIORITY_PRICE = new BigDecimal(1);
@@ -114,7 +117,8 @@ public class ClientSubscriptionResourceIntTest {
         ClientSubscription clientSubscription = new ClientSubscription()
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE)
-            .link(DEFAULT_LINK)
+            .resourceUrl(DEFAULT_RESOURCE_URL)
+            .redirectUrl(DEFAULT_REDIRECT_URL)
             .priorityPrice(DEFAULT_PRIORITY_PRICE)
             .discount(DEFAULT_DISCOUNT)
             .totalPrice(DEFAULT_TOTAL_PRICE)
@@ -160,7 +164,8 @@ public class ClientSubscriptionResourceIntTest {
         ClientSubscription testClientSubscription = clientSubscriptionList.get(clientSubscriptionList.size() - 1);
         assertThat(testClientSubscription.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testClientSubscription.getEndDate()).isEqualTo(DEFAULT_END_DATE);
-        assertThat(testClientSubscription.getLink()).isEqualTo(DEFAULT_LINK);
+        assertThat(testClientSubscription.getResourceUrl()).isEqualTo(DEFAULT_RESOURCE_URL);
+        assertThat(testClientSubscription.getRedirectUrl()).isEqualTo(DEFAULT_REDIRECT_URL);
         assertThat(testClientSubscription.getPriorityPrice()).isEqualTo(DEFAULT_PRIORITY_PRICE);
         assertThat(testClientSubscription.getDiscount()).isEqualTo(DEFAULT_DISCOUNT);
         assertThat(testClientSubscription.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
@@ -227,10 +232,10 @@ public class ClientSubscriptionResourceIntTest {
 
     @Test
     @Transactional
-    public void checkLinkIsRequired() throws Exception {
+    public void checkResourceUrlIsRequired() throws Exception {
         int databaseSizeBeforeTest = clientSubscriptionRepository.findAll().size();
         // set the field null
-        clientSubscription.setLink(null);
+        clientSubscription.setResourceUrl(null);
 
         // Create the ClientSubscription, which fails.
         ClientSubscriptionDTO clientSubscriptionDTO = clientSubscriptionMapper.toDto(clientSubscription);
@@ -295,7 +300,8 @@ public class ClientSubscriptionResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(clientSubscription.getId().intValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
-            .andExpect(jsonPath("$.[*].link").value(hasItem(DEFAULT_LINK.toString())))
+            .andExpect(jsonPath("$.[*].resourceUrl").value(hasItem(DEFAULT_RESOURCE_URL.toString())))
+            .andExpect(jsonPath("$.[*].redirectUrl").value(hasItem(DEFAULT_REDIRECT_URL.toString())))
             .andExpect(jsonPath("$.[*].priorityPrice").value(hasItem(DEFAULT_PRIORITY_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].discount").value(hasItem(DEFAULT_DISCOUNT.intValue())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.intValue())))
@@ -315,7 +321,8 @@ public class ClientSubscriptionResourceIntTest {
             .andExpect(jsonPath("$.id").value(clientSubscription.getId().intValue()))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
-            .andExpect(jsonPath("$.link").value(DEFAULT_LINK.toString()))
+            .andExpect(jsonPath("$.resourceUrl").value(DEFAULT_RESOURCE_URL.toString()))
+            .andExpect(jsonPath("$.redirectUrl").value(DEFAULT_REDIRECT_URL.toString()))
             .andExpect(jsonPath("$.priorityPrice").value(DEFAULT_PRIORITY_PRICE.intValue()))
             .andExpect(jsonPath("$.discount").value(DEFAULT_DISCOUNT.intValue()))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE.intValue()))
@@ -344,7 +351,8 @@ public class ClientSubscriptionResourceIntTest {
         updatedClientSubscription
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
-            .link(UPDATED_LINK)
+            .resourceUrl(UPDATED_RESOURCE_URL)
+            .redirectUrl(UPDATED_REDIRECT_URL)
             .priorityPrice(UPDATED_PRIORITY_PRICE)
             .discount(UPDATED_DISCOUNT)
             .totalPrice(UPDATED_TOTAL_PRICE)
@@ -362,7 +370,8 @@ public class ClientSubscriptionResourceIntTest {
         ClientSubscription testClientSubscription = clientSubscriptionList.get(clientSubscriptionList.size() - 1);
         assertThat(testClientSubscription.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testClientSubscription.getEndDate()).isEqualTo(UPDATED_END_DATE);
-        assertThat(testClientSubscription.getLink()).isEqualTo(UPDATED_LINK);
+        assertThat(testClientSubscription.getResourceUrl()).isEqualTo(UPDATED_RESOURCE_URL);
+        assertThat(testClientSubscription.getRedirectUrl()).isEqualTo(UPDATED_REDIRECT_URL);
         assertThat(testClientSubscription.getPriorityPrice()).isEqualTo(UPDATED_PRIORITY_PRICE);
         assertThat(testClientSubscription.getDiscount()).isEqualTo(UPDATED_DISCOUNT);
         assertThat(testClientSubscription.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);

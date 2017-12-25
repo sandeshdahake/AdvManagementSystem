@@ -34,8 +34,11 @@ public class ClientSubscription implements Serializable {
     private LocalDate endDate;
 
     @NotNull
-    @Column(name = "jhi_link", nullable = false)
-    private String link;
+    @Column(name = "resource_url", nullable = false)
+    private String resourceUrl;
+
+    @Column(name = "redirect_url")
+    private String redirectUrl;
 
     @DecimalMin(value = "0")
     @Column(name = "priority_price", precision=10, scale=2)
@@ -101,17 +104,30 @@ public class ClientSubscription implements Serializable {
         this.endDate = endDate;
     }
 
-    public String getLink() {
-        return link;
+    public String getResourceUrl() {
+        return resourceUrl;
     }
 
-    public ClientSubscription link(String link) {
-        this.link = link;
+    public ClientSubscription resourceUrl(String resourceUrl) {
+        this.resourceUrl = resourceUrl;
         return this;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setResourceUrl(String resourceUrl) {
+        this.resourceUrl = resourceUrl;
+    }
+
+    public String getRedirectUrl() {
+        return redirectUrl;
+    }
+
+    public ClientSubscription redirectUrl(String redirectUrl) {
+        this.redirectUrl = redirectUrl;
+        return this;
+    }
+
+    public void setRedirectUrl(String redirectUrl) {
+        this.redirectUrl = redirectUrl;
     }
 
     public BigDecimal getPriorityPrice() {
@@ -232,7 +248,8 @@ public class ClientSubscription implements Serializable {
             "id=" + getId() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
-            ", link='" + getLink() + "'" +
+            ", resourceUrl='" + getResourceUrl() + "'" +
+            ", redirectUrl='" + getRedirectUrl() + "'" +
             ", priorityPrice=" + getPriorityPrice() +
             ", discount=" + getDiscount() +
             ", totalPrice=" + getTotalPrice() +

@@ -23,7 +23,9 @@ public class ClientSubscriptionDTO implements Serializable {
     private LocalDate endDate;
 
     @NotNull
-    private String link;
+    private String resourceUrl;
+
+    private String redirectUrl;
 
     @DecimalMin(value = "0")
     private BigDecimal priorityPrice;
@@ -74,12 +76,20 @@ public class ClientSubscriptionDTO implements Serializable {
         this.endDate = endDate;
     }
 
-    public String getLink() {
-        return link;
+    public String getResourceUrl() {
+        return resourceUrl;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setResourceUrl(String resourceUrl) {
+        this.resourceUrl = resourceUrl;
+    }
+
+    public String getRedirectUrl() {
+        return redirectUrl;
+    }
+
+    public void setRedirectUrl(String redirectUrl) {
+        this.redirectUrl = redirectUrl;
     }
 
     public BigDecimal getPriorityPrice() {
@@ -189,7 +199,8 @@ public class ClientSubscriptionDTO implements Serializable {
             "id=" + getId() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
-            ", link='" + getLink() + "'" +
+            ", resourceUrl='" + getResourceUrl() + "'" +
+            ", redirectUrl='" + getRedirectUrl() + "'" +
             ", priorityPrice=" + getPriorityPrice() +
             ", discount=" + getDiscount() +
             ", totalPrice=" + getTotalPrice() +
