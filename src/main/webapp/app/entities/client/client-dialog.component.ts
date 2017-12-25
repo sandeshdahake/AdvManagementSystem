@@ -35,7 +35,7 @@ export class ClientDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.cityService.query()
+        this.cityService.queryActive()
             .subscribe((res: ResponseWrapper) => { this.cities = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
 
