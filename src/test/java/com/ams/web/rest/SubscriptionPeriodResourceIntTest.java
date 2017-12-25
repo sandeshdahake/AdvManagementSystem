@@ -47,6 +47,9 @@ public class SubscriptionPeriodResourceIntTest {
     private static final Integer DEFAULT_SUBSCRIPTION_DAYS = 1;
     private static final Integer UPDATED_SUBSCRIPTION_DAYS = 2;
 
+    private static final Boolean DEFAULT_ACTIVATE = false;
+    private static final Boolean UPDATED_ACTIVATE = true;
+
     @Autowired
     private SubscriptionPeriodRepository subscriptionPeriodRepository;
 
@@ -92,7 +95,8 @@ public class SubscriptionPeriodResourceIntTest {
     public static SubscriptionPeriod createEntity(EntityManager em) {
         SubscriptionPeriod subscriptionPeriod = new SubscriptionPeriod()
             .periodLabel(DEFAULT_PERIOD_LABEL)
-            .subscriptionDays(DEFAULT_SUBSCRIPTION_DAYS);
+            .subscriptionDays(DEFAULT_SUBSCRIPTION_DAYS)
+            .activate(DEFAULT_ACTIVATE);
         return subscriptionPeriod;
     }
 
@@ -119,6 +123,7 @@ public class SubscriptionPeriodResourceIntTest {
         SubscriptionPeriod testSubscriptionPeriod = subscriptionPeriodList.get(subscriptionPeriodList.size() - 1);
         assertThat(testSubscriptionPeriod.getPeriodLabel()).isEqualTo(DEFAULT_PERIOD_LABEL);
         assertThat(testSubscriptionPeriod.getSubscriptionDays()).isEqualTo(DEFAULT_SUBSCRIPTION_DAYS);
+        assertThat(testSubscriptionPeriod.isActivate()).isEqualTo(DEFAULT_ACTIVATE);
     }
 
     @Test
@@ -181,6 +186,25 @@ public class SubscriptionPeriodResourceIntTest {
 
     @Test
     @Transactional
+    public void checkActivateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = subscriptionPeriodRepository.findAll().size();
+        // set the field null
+        subscriptionPeriod.setActivate(null);
+
+        // Create the SubscriptionPeriod, which fails.
+        SubscriptionPeriodDTO subscriptionPeriodDTO = subscriptionPeriodMapper.toDto(subscriptionPeriod);
+
+        restSubscriptionPeriodMockMvc.perform(post("/api/subscription-periods")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(subscriptionPeriodDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<SubscriptionPeriod> subscriptionPeriodList = subscriptionPeriodRepository.findAll();
+        assertThat(subscriptionPeriodList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllSubscriptionPeriods() throws Exception {
         // Initialize the database
         subscriptionPeriodRepository.saveAndFlush(subscriptionPeriod);
@@ -191,7 +215,8 @@ public class SubscriptionPeriodResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(subscriptionPeriod.getId().intValue())))
             .andExpect(jsonPath("$.[*].periodLabel").value(hasItem(DEFAULT_PERIOD_LABEL.toString())))
-            .andExpect(jsonPath("$.[*].subscriptionDays").value(hasItem(DEFAULT_SUBSCRIPTION_DAYS)));
+            .andExpect(jsonPath("$.[*].subscriptionDays").value(hasItem(DEFAULT_SUBSCRIPTION_DAYS)))
+            .andExpect(jsonPath("$.[*].activate").value(hasItem(DEFAULT_ACTIVATE.booleanValue())));
     }
 
     @Test
@@ -206,7 +231,8 @@ public class SubscriptionPeriodResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(subscriptionPeriod.getId().intValue()))
             .andExpect(jsonPath("$.periodLabel").value(DEFAULT_PERIOD_LABEL.toString()))
-            .andExpect(jsonPath("$.subscriptionDays").value(DEFAULT_SUBSCRIPTION_DAYS));
+            .andExpect(jsonPath("$.subscriptionDays").value(DEFAULT_SUBSCRIPTION_DAYS))
+            .andExpect(jsonPath("$.activate").value(DEFAULT_ACTIVATE.booleanValue()));
     }
 
     @Test
@@ -230,7 +256,8 @@ public class SubscriptionPeriodResourceIntTest {
         em.detach(updatedSubscriptionPeriod);
         updatedSubscriptionPeriod
             .periodLabel(UPDATED_PERIOD_LABEL)
-            .subscriptionDays(UPDATED_SUBSCRIPTION_DAYS);
+            .subscriptionDays(UPDATED_SUBSCRIPTION_DAYS)
+            .activate(UPDATED_ACTIVATE);
         SubscriptionPeriodDTO subscriptionPeriodDTO = subscriptionPeriodMapper.toDto(updatedSubscriptionPeriod);
 
         restSubscriptionPeriodMockMvc.perform(put("/api/subscription-periods")
@@ -244,6 +271,7 @@ public class SubscriptionPeriodResourceIntTest {
         SubscriptionPeriod testSubscriptionPeriod = subscriptionPeriodList.get(subscriptionPeriodList.size() - 1);
         assertThat(testSubscriptionPeriod.getPeriodLabel()).isEqualTo(UPDATED_PERIOD_LABEL);
         assertThat(testSubscriptionPeriod.getSubscriptionDays()).isEqualTo(UPDATED_SUBSCRIPTION_DAYS);
+        assertThat(testSubscriptionPeriod.isActivate()).isEqualTo(UPDATED_ACTIVATE);
     }
 
     @Test

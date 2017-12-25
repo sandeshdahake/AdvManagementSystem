@@ -31,6 +31,10 @@ public class BannerType implements Serializable {
     @Column(name = "banner_type", length = 200, nullable = false)
     private String bannerType;
 
+    @NotNull
+    @Column(name = "jhi_activate", nullable = false)
+    private Boolean activate;
+
     @OneToMany(mappedBy = "bannerType")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -56,6 +60,19 @@ public class BannerType implements Serializable {
 
     public void setBannerType(String bannerType) {
         this.bannerType = bannerType;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public BannerType activate(Boolean activate) {
+        this.activate = activate;
+        return this;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     public Set<SubscriptionPlan> getSubscriptionPlans() {
@@ -109,6 +126,7 @@ public class BannerType implements Serializable {
         return "BannerType{" +
             "id=" + getId() +
             ", bannerType='" + getBannerType() + "'" +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

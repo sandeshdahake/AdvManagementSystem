@@ -36,6 +36,10 @@ public class SubscriptionPeriod implements Serializable {
     @Column(name = "subscription_days", nullable = false)
     private Integer subscriptionDays;
 
+    @NotNull
+    @Column(name = "jhi_activate", nullable = false)
+    private Boolean activate;
+
     @OneToMany(mappedBy = "subscriptionPeriod")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -74,6 +78,19 @@ public class SubscriptionPeriod implements Serializable {
 
     public void setSubscriptionDays(Integer subscriptionDays) {
         this.subscriptionDays = subscriptionDays;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public SubscriptionPeriod activate(Boolean activate) {
+        this.activate = activate;
+        return this;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     public Set<SubscriptionPlan> getSubscriptionPlans() {
@@ -128,6 +145,7 @@ public class SubscriptionPeriod implements Serializable {
             "id=" + getId() +
             ", periodLabel='" + getPeriodLabel() + "'" +
             ", subscriptionDays=" + getSubscriptionDays() +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

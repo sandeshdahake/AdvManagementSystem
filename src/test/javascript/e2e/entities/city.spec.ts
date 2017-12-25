@@ -33,6 +33,15 @@ describe('City e2e test', () => {
         cityComponentsPage.clickOnCreateButton();
         cityDialogPage.setCityNameInput('cityName');
         expect(cityDialogPage.getCityNameInput()).toMatch('cityName');
+        cityDialogPage.getActivateInput().isSelected().then((selected) => {
+            if (selected) {
+                cityDialogPage.getActivateInput().click();
+                expect(cityDialogPage.getActivateInput().isSelected()).toBeFalsy();
+            } else {
+                cityDialogPage.getActivateInput().click();
+                expect(cityDialogPage.getActivateInput().isSelected()).toBeTruthy();
+            }
+        });
         cityDialogPage.save();
         expect(cityDialogPage.getSaveButton().isPresent()).toBeFalsy();
     });
@@ -60,6 +69,7 @@ export class CityDialogPage {
     saveButton = element(by.css('.modal-footer .btn.btn-primary'));
     closeButton = element(by.css('button.close'));
     cityNameInput = element(by.css('input#field_cityName'));
+    activateInput = element(by.css('input#field_activate'));
 
     getModalTitle() {
         return this.modalTitle.getText();
@@ -73,6 +83,9 @@ export class CityDialogPage {
         return this.cityNameInput.getAttribute('value');
     }
 
+    getActivateInput = function() {
+        return this.activateInput;
+    }
     save() {
         this.saveButton.click();
     }

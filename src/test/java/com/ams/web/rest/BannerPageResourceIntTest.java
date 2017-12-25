@@ -44,6 +44,9 @@ public class BannerPageResourceIntTest {
     private static final String DEFAULT_BANNER_PAGE = "AAAAAAAAAA";
     private static final String UPDATED_BANNER_PAGE = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_ACTIVATE = false;
+    private static final Boolean UPDATED_ACTIVATE = true;
+
     @Autowired
     private BannerPageRepository bannerPageRepository;
 
@@ -88,7 +91,8 @@ public class BannerPageResourceIntTest {
      */
     public static BannerPage createEntity(EntityManager em) {
         BannerPage bannerPage = new BannerPage()
-            .bannerPage(DEFAULT_BANNER_PAGE);
+            .bannerPage(DEFAULT_BANNER_PAGE)
+            .activate(DEFAULT_ACTIVATE);
         return bannerPage;
     }
 
@@ -114,6 +118,7 @@ public class BannerPageResourceIntTest {
         assertThat(bannerPageList).hasSize(databaseSizeBeforeCreate + 1);
         BannerPage testBannerPage = bannerPageList.get(bannerPageList.size() - 1);
         assertThat(testBannerPage.getBannerPage()).isEqualTo(DEFAULT_BANNER_PAGE);
+        assertThat(testBannerPage.isActivate()).isEqualTo(DEFAULT_ACTIVATE);
     }
 
     @Test
@@ -157,6 +162,25 @@ public class BannerPageResourceIntTest {
 
     @Test
     @Transactional
+    public void checkActivateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bannerPageRepository.findAll().size();
+        // set the field null
+        bannerPage.setActivate(null);
+
+        // Create the BannerPage, which fails.
+        BannerPageDTO bannerPageDTO = bannerPageMapper.toDto(bannerPage);
+
+        restBannerPageMockMvc.perform(post("/api/banner-pages")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(bannerPageDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<BannerPage> bannerPageList = bannerPageRepository.findAll();
+        assertThat(bannerPageList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllBannerPages() throws Exception {
         // Initialize the database
         bannerPageRepository.saveAndFlush(bannerPage);
@@ -166,7 +190,8 @@ public class BannerPageResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(bannerPage.getId().intValue())))
-            .andExpect(jsonPath("$.[*].bannerPage").value(hasItem(DEFAULT_BANNER_PAGE.toString())));
+            .andExpect(jsonPath("$.[*].bannerPage").value(hasItem(DEFAULT_BANNER_PAGE.toString())))
+            .andExpect(jsonPath("$.[*].activate").value(hasItem(DEFAULT_ACTIVATE.booleanValue())));
     }
 
     @Test
@@ -180,7 +205,8 @@ public class BannerPageResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(bannerPage.getId().intValue()))
-            .andExpect(jsonPath("$.bannerPage").value(DEFAULT_BANNER_PAGE.toString()));
+            .andExpect(jsonPath("$.bannerPage").value(DEFAULT_BANNER_PAGE.toString()))
+            .andExpect(jsonPath("$.activate").value(DEFAULT_ACTIVATE.booleanValue()));
     }
 
     @Test
@@ -203,7 +229,8 @@ public class BannerPageResourceIntTest {
         // Disconnect from session so that the updates on updatedBannerPage are not directly saved in db
         em.detach(updatedBannerPage);
         updatedBannerPage
-            .bannerPage(UPDATED_BANNER_PAGE);
+            .bannerPage(UPDATED_BANNER_PAGE)
+            .activate(UPDATED_ACTIVATE);
         BannerPageDTO bannerPageDTO = bannerPageMapper.toDto(updatedBannerPage);
 
         restBannerPageMockMvc.perform(put("/api/banner-pages")
@@ -216,6 +243,7 @@ public class BannerPageResourceIntTest {
         assertThat(bannerPageList).hasSize(databaseSizeBeforeUpdate);
         BannerPage testBannerPage = bannerPageList.get(bannerPageList.size() - 1);
         assertThat(testBannerPage.getBannerPage()).isEqualTo(UPDATED_BANNER_PAGE);
+        assertThat(testBannerPage.isActivate()).isEqualTo(UPDATED_ACTIVATE);
     }
 
     @Test

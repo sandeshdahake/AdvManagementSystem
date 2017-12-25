@@ -18,6 +18,7 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="bannerSize"><span>Banner Size</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="activate"><span>Activate</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
@@ -25,6 +26,7 @@
             <tr *ngFor="let bannerSize of bannerSizes ;trackBy: trackId">
                 <td><a [routerLink]="['../banner-size', bannerSize.id ]">{{bannerSize.id}}</a></td>
                 <td>{{bannerSize.bannerSize}}</td>
+                <td>{{bannerSize.activate}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

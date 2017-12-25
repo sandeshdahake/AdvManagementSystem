@@ -35,6 +35,10 @@ public class Client implements Serializable {
     @Column(name = "client_address", nullable = false)
     private String clientAddress;
 
+    @NotNull
+    @Column(name = "jhi_activate", nullable = false)
+    private Boolean activate;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @NotNull
@@ -81,6 +85,19 @@ public class Client implements Serializable {
 
     public void setClientAddress(String clientAddress) {
         this.clientAddress = clientAddress;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public Client activate(Boolean activate) {
+        this.activate = activate;
+        return this;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     public Set<City> getCities() {
@@ -160,6 +177,7 @@ public class Client implements Serializable {
             "id=" + getId() +
             ", clientName='" + getClientName() + "'" +
             ", clientAddress='" + getClientAddress() + "'" +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

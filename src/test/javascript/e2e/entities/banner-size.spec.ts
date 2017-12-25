@@ -33,6 +33,15 @@ describe('BannerSize e2e test', () => {
         bannerSizeComponentsPage.clickOnCreateButton();
         bannerSizeDialogPage.setBannerSizeInput('bannerSize');
         expect(bannerSizeDialogPage.getBannerSizeInput()).toMatch('bannerSize');
+        bannerSizeDialogPage.getActivateInput().isSelected().then((selected) => {
+            if (selected) {
+                bannerSizeDialogPage.getActivateInput().click();
+                expect(bannerSizeDialogPage.getActivateInput().isSelected()).toBeFalsy();
+            } else {
+                bannerSizeDialogPage.getActivateInput().click();
+                expect(bannerSizeDialogPage.getActivateInput().isSelected()).toBeTruthy();
+            }
+        });
         bannerSizeDialogPage.save();
         expect(bannerSizeDialogPage.getSaveButton().isPresent()).toBeFalsy();
     });
@@ -60,6 +69,7 @@ export class BannerSizeDialogPage {
     saveButton = element(by.css('.modal-footer .btn.btn-primary'));
     closeButton = element(by.css('button.close'));
     bannerSizeInput = element(by.css('input#field_bannerSize'));
+    activateInput = element(by.css('input#field_activate'));
 
     getModalTitle() {
         return this.modalTitle.getText();
@@ -73,6 +83,9 @@ export class BannerSizeDialogPage {
         return this.bannerSizeInput.getAttribute('value');
     }
 
+    getActivateInput = function() {
+        return this.activateInput;
+    }
     save() {
         this.saveButton.click();
     }

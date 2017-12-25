@@ -49,6 +49,9 @@ public class ClientResourceIntTest {
     private static final String DEFAULT_CLIENT_ADDRESS = "AAAAAAAAAA";
     private static final String UPDATED_CLIENT_ADDRESS = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_ACTIVATE = false;
+    private static final Boolean UPDATED_ACTIVATE = true;
+
     @Autowired
     private ClientRepository clientRepository;
 
@@ -94,7 +97,8 @@ public class ClientResourceIntTest {
     public static Client createEntity(EntityManager em) {
         Client client = new Client()
             .clientName(DEFAULT_CLIENT_NAME)
-            .clientAddress(DEFAULT_CLIENT_ADDRESS);
+            .clientAddress(DEFAULT_CLIENT_ADDRESS)
+            .activate(DEFAULT_ACTIVATE);
         // Add required entity
         City city = CityResourceIntTest.createEntity(em);
         em.persist(city);
@@ -126,6 +130,7 @@ public class ClientResourceIntTest {
         Client testClient = clientList.get(clientList.size() - 1);
         assertThat(testClient.getClientName()).isEqualTo(DEFAULT_CLIENT_NAME);
         assertThat(testClient.getClientAddress()).isEqualTo(DEFAULT_CLIENT_ADDRESS);
+        assertThat(testClient.isActivate()).isEqualTo(DEFAULT_ACTIVATE);
     }
 
     @Test
@@ -188,6 +193,25 @@ public class ClientResourceIntTest {
 
     @Test
     @Transactional
+    public void checkActivateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = clientRepository.findAll().size();
+        // set the field null
+        client.setActivate(null);
+
+        // Create the Client, which fails.
+        ClientDTO clientDTO = clientMapper.toDto(client);
+
+        restClientMockMvc.perform(post("/api/clients")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(clientDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Client> clientList = clientRepository.findAll();
+        assertThat(clientList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllClients() throws Exception {
         // Initialize the database
         clientRepository.saveAndFlush(client);
@@ -198,7 +222,8 @@ public class ClientResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(client.getId().intValue())))
             .andExpect(jsonPath("$.[*].clientName").value(hasItem(DEFAULT_CLIENT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].clientAddress").value(hasItem(DEFAULT_CLIENT_ADDRESS.toString())));
+            .andExpect(jsonPath("$.[*].clientAddress").value(hasItem(DEFAULT_CLIENT_ADDRESS.toString())))
+            .andExpect(jsonPath("$.[*].activate").value(hasItem(DEFAULT_ACTIVATE.booleanValue())));
     }
 
     @Test
@@ -213,7 +238,8 @@ public class ClientResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(client.getId().intValue()))
             .andExpect(jsonPath("$.clientName").value(DEFAULT_CLIENT_NAME.toString()))
-            .andExpect(jsonPath("$.clientAddress").value(DEFAULT_CLIENT_ADDRESS.toString()));
+            .andExpect(jsonPath("$.clientAddress").value(DEFAULT_CLIENT_ADDRESS.toString()))
+            .andExpect(jsonPath("$.activate").value(DEFAULT_ACTIVATE.booleanValue()));
     }
 
     @Test
@@ -237,7 +263,8 @@ public class ClientResourceIntTest {
         em.detach(updatedClient);
         updatedClient
             .clientName(UPDATED_CLIENT_NAME)
-            .clientAddress(UPDATED_CLIENT_ADDRESS);
+            .clientAddress(UPDATED_CLIENT_ADDRESS)
+            .activate(UPDATED_ACTIVATE);
         ClientDTO clientDTO = clientMapper.toDto(updatedClient);
 
         restClientMockMvc.perform(put("/api/clients")
@@ -251,6 +278,7 @@ public class ClientResourceIntTest {
         Client testClient = clientList.get(clientList.size() - 1);
         assertThat(testClient.getClientName()).isEqualTo(UPDATED_CLIENT_NAME);
         assertThat(testClient.getClientAddress()).isEqualTo(UPDATED_CLIENT_ADDRESS);
+        assertThat(testClient.isActivate()).isEqualTo(UPDATED_ACTIVATE);
     }
 
     @Test

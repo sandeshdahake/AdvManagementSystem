@@ -37,6 +37,15 @@ describe('SubscriptionPlan e2e test', () => {
         expect(subscriptionPlanDialogPage.getPriceInput()).toMatch('5');
         subscriptionPlanDialogPage.setMaxSubscriptionInput('5');
         expect(subscriptionPlanDialogPage.getMaxSubscriptionInput()).toMatch('5');
+        subscriptionPlanDialogPage.getActivateInput().isSelected().then((selected) => {
+            if (selected) {
+                subscriptionPlanDialogPage.getActivateInput().click();
+                expect(subscriptionPlanDialogPage.getActivateInput().isSelected()).toBeFalsy();
+            } else {
+                subscriptionPlanDialogPage.getActivateInput().click();
+                expect(subscriptionPlanDialogPage.getActivateInput().isSelected()).toBeTruthy();
+            }
+        });
         subscriptionPlanDialogPage.bannerTypeSelectLastOption();
         subscriptionPlanDialogPage.bannerSizeSelectLastOption();
         subscriptionPlanDialogPage.bannerLocationSelectLastOption();
@@ -72,6 +81,7 @@ export class SubscriptionPlanDialogPage {
     planNameInput = element(by.css('input#field_planName'));
     priceInput = element(by.css('input#field_price'));
     maxSubscriptionInput = element(by.css('input#field_maxSubscription'));
+    activateInput = element(by.css('input#field_activate'));
     bannerTypeSelect = element(by.css('select#field_bannerType'));
     bannerSizeSelect = element(by.css('select#field_bannerSize'));
     bannerLocationSelect = element(by.css('select#field_bannerLocation'));
@@ -107,6 +117,9 @@ export class SubscriptionPlanDialogPage {
         return this.maxSubscriptionInput.getAttribute('value');
     }
 
+    getActivateInput = function() {
+        return this.activateInput;
+    }
     bannerTypeSelectLastOption = function() {
         this.bannerTypeSelect.all(by.tagName('option')).last().click();
     }

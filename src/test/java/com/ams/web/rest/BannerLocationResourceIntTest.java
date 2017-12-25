@@ -44,6 +44,9 @@ public class BannerLocationResourceIntTest {
     private static final String DEFAULT_BANNER_LOCATION = "AAAAAAAAAA";
     private static final String UPDATED_BANNER_LOCATION = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_ACTIVATE = false;
+    private static final Boolean UPDATED_ACTIVATE = true;
+
     @Autowired
     private BannerLocationRepository bannerLocationRepository;
 
@@ -88,7 +91,8 @@ public class BannerLocationResourceIntTest {
      */
     public static BannerLocation createEntity(EntityManager em) {
         BannerLocation bannerLocation = new BannerLocation()
-            .bannerLocation(DEFAULT_BANNER_LOCATION);
+            .bannerLocation(DEFAULT_BANNER_LOCATION)
+            .activate(DEFAULT_ACTIVATE);
         return bannerLocation;
     }
 
@@ -114,6 +118,7 @@ public class BannerLocationResourceIntTest {
         assertThat(bannerLocationList).hasSize(databaseSizeBeforeCreate + 1);
         BannerLocation testBannerLocation = bannerLocationList.get(bannerLocationList.size() - 1);
         assertThat(testBannerLocation.getBannerLocation()).isEqualTo(DEFAULT_BANNER_LOCATION);
+        assertThat(testBannerLocation.isActivate()).isEqualTo(DEFAULT_ACTIVATE);
     }
 
     @Test
@@ -157,6 +162,25 @@ public class BannerLocationResourceIntTest {
 
     @Test
     @Transactional
+    public void checkActivateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bannerLocationRepository.findAll().size();
+        // set the field null
+        bannerLocation.setActivate(null);
+
+        // Create the BannerLocation, which fails.
+        BannerLocationDTO bannerLocationDTO = bannerLocationMapper.toDto(bannerLocation);
+
+        restBannerLocationMockMvc.perform(post("/api/banner-locations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(bannerLocationDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<BannerLocation> bannerLocationList = bannerLocationRepository.findAll();
+        assertThat(bannerLocationList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllBannerLocations() throws Exception {
         // Initialize the database
         bannerLocationRepository.saveAndFlush(bannerLocation);
@@ -166,7 +190,8 @@ public class BannerLocationResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(bannerLocation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].bannerLocation").value(hasItem(DEFAULT_BANNER_LOCATION.toString())));
+            .andExpect(jsonPath("$.[*].bannerLocation").value(hasItem(DEFAULT_BANNER_LOCATION.toString())))
+            .andExpect(jsonPath("$.[*].activate").value(hasItem(DEFAULT_ACTIVATE.booleanValue())));
     }
 
     @Test
@@ -180,7 +205,8 @@ public class BannerLocationResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(bannerLocation.getId().intValue()))
-            .andExpect(jsonPath("$.bannerLocation").value(DEFAULT_BANNER_LOCATION.toString()));
+            .andExpect(jsonPath("$.bannerLocation").value(DEFAULT_BANNER_LOCATION.toString()))
+            .andExpect(jsonPath("$.activate").value(DEFAULT_ACTIVATE.booleanValue()));
     }
 
     @Test
@@ -203,7 +229,8 @@ public class BannerLocationResourceIntTest {
         // Disconnect from session so that the updates on updatedBannerLocation are not directly saved in db
         em.detach(updatedBannerLocation);
         updatedBannerLocation
-            .bannerLocation(UPDATED_BANNER_LOCATION);
+            .bannerLocation(UPDATED_BANNER_LOCATION)
+            .activate(UPDATED_ACTIVATE);
         BannerLocationDTO bannerLocationDTO = bannerLocationMapper.toDto(updatedBannerLocation);
 
         restBannerLocationMockMvc.perform(put("/api/banner-locations")
@@ -216,6 +243,7 @@ public class BannerLocationResourceIntTest {
         assertThat(bannerLocationList).hasSize(databaseSizeBeforeUpdate);
         BannerLocation testBannerLocation = bannerLocationList.get(bannerLocationList.size() - 1);
         assertThat(testBannerLocation.getBannerLocation()).isEqualTo(UPDATED_BANNER_LOCATION);
+        assertThat(testBannerLocation.isActivate()).isEqualTo(UPDATED_ACTIVATE);
     }
 
     @Test

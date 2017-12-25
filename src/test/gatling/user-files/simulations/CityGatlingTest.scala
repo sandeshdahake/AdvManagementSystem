@@ -68,7 +68,7 @@ class CityGatlingTest extends Simulation {
             .exec(http("Create new city")
             .post("/api/cities")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "cityName":"SAMPLE_TEXT"}""")).asJSON
+            .body(StringBody("""{"id":null, "cityName":"SAMPLE_TEXT", "activate":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_city_url"))).exitHereIfFailed
             .pause(10)

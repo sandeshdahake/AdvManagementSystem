@@ -68,7 +68,7 @@ class BannerPageGatlingTest extends Simulation {
             .exec(http("Create new bannerPage")
             .post("/api/banner-pages")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "bannerPage":"SAMPLE_TEXT"}""")).asJSON
+            .body(StringBody("""{"id":null, "bannerPage":"SAMPLE_TEXT", "activate":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_bannerPage_url"))).exitHereIfFailed
             .pause(10)

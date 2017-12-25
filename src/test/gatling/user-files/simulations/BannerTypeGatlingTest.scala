@@ -68,7 +68,7 @@ class BannerTypeGatlingTest extends Simulation {
             .exec(http("Create new bannerType")
             .post("/api/banner-types")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "bannerType":"SAMPLE_TEXT"}""")).asJSON
+            .body(StringBody("""{"id":null, "bannerType":"SAMPLE_TEXT", "activate":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_bannerType_url"))).exitHereIfFailed
             .pause(10)

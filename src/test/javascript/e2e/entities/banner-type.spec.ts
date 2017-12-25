@@ -33,6 +33,15 @@ describe('BannerType e2e test', () => {
         bannerTypeComponentsPage.clickOnCreateButton();
         bannerTypeDialogPage.setBannerTypeInput('bannerType');
         expect(bannerTypeDialogPage.getBannerTypeInput()).toMatch('bannerType');
+        bannerTypeDialogPage.getActivateInput().isSelected().then((selected) => {
+            if (selected) {
+                bannerTypeDialogPage.getActivateInput().click();
+                expect(bannerTypeDialogPage.getActivateInput().isSelected()).toBeFalsy();
+            } else {
+                bannerTypeDialogPage.getActivateInput().click();
+                expect(bannerTypeDialogPage.getActivateInput().isSelected()).toBeTruthy();
+            }
+        });
         bannerTypeDialogPage.save();
         expect(bannerTypeDialogPage.getSaveButton().isPresent()).toBeFalsy();
     });
@@ -60,6 +69,7 @@ export class BannerTypeDialogPage {
     saveButton = element(by.css('.modal-footer .btn.btn-primary'));
     closeButton = element(by.css('button.close'));
     bannerTypeInput = element(by.css('input#field_bannerType'));
+    activateInput = element(by.css('input#field_activate'));
 
     getModalTitle() {
         return this.modalTitle.getText();
@@ -73,6 +83,9 @@ export class BannerTypeDialogPage {
         return this.bannerTypeInput.getAttribute('value');
     }
 
+    getActivateInput = function() {
+        return this.activateInput;
+    }
     save() {
         this.saveButton.click();
     }

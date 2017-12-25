@@ -18,6 +18,9 @@ public class BannerSizeDTO implements Serializable {
     @Size(max = 200)
     private String bannerSize;
 
+    @NotNull
+    private Boolean activate;
+
     public Long getId() {
         return id;
     }
@@ -32,6 +35,14 @@ public class BannerSizeDTO implements Serializable {
 
     public void setBannerSize(String bannerSize) {
         this.bannerSize = bannerSize;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     @Override
@@ -60,6 +71,7 @@ public class BannerSizeDTO implements Serializable {
         return "BannerSizeDTO{" +
             "id=" + getId() +
             ", bannerSize='" + getBannerSize() + "'" +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

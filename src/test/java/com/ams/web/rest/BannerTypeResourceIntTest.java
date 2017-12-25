@@ -44,6 +44,9 @@ public class BannerTypeResourceIntTest {
     private static final String DEFAULT_BANNER_TYPE = "AAAAAAAAAA";
     private static final String UPDATED_BANNER_TYPE = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_ACTIVATE = false;
+    private static final Boolean UPDATED_ACTIVATE = true;
+
     @Autowired
     private BannerTypeRepository bannerTypeRepository;
 
@@ -88,7 +91,8 @@ public class BannerTypeResourceIntTest {
      */
     public static BannerType createEntity(EntityManager em) {
         BannerType bannerType = new BannerType()
-            .bannerType(DEFAULT_BANNER_TYPE);
+            .bannerType(DEFAULT_BANNER_TYPE)
+            .activate(DEFAULT_ACTIVATE);
         return bannerType;
     }
 
@@ -114,6 +118,7 @@ public class BannerTypeResourceIntTest {
         assertThat(bannerTypeList).hasSize(databaseSizeBeforeCreate + 1);
         BannerType testBannerType = bannerTypeList.get(bannerTypeList.size() - 1);
         assertThat(testBannerType.getBannerType()).isEqualTo(DEFAULT_BANNER_TYPE);
+        assertThat(testBannerType.isActivate()).isEqualTo(DEFAULT_ACTIVATE);
     }
 
     @Test
@@ -157,6 +162,25 @@ public class BannerTypeResourceIntTest {
 
     @Test
     @Transactional
+    public void checkActivateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bannerTypeRepository.findAll().size();
+        // set the field null
+        bannerType.setActivate(null);
+
+        // Create the BannerType, which fails.
+        BannerTypeDTO bannerTypeDTO = bannerTypeMapper.toDto(bannerType);
+
+        restBannerTypeMockMvc.perform(post("/api/banner-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(bannerTypeDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<BannerType> bannerTypeList = bannerTypeRepository.findAll();
+        assertThat(bannerTypeList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllBannerTypes() throws Exception {
         // Initialize the database
         bannerTypeRepository.saveAndFlush(bannerType);
@@ -166,7 +190,8 @@ public class BannerTypeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(bannerType.getId().intValue())))
-            .andExpect(jsonPath("$.[*].bannerType").value(hasItem(DEFAULT_BANNER_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].bannerType").value(hasItem(DEFAULT_BANNER_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].activate").value(hasItem(DEFAULT_ACTIVATE.booleanValue())));
     }
 
     @Test
@@ -180,7 +205,8 @@ public class BannerTypeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(bannerType.getId().intValue()))
-            .andExpect(jsonPath("$.bannerType").value(DEFAULT_BANNER_TYPE.toString()));
+            .andExpect(jsonPath("$.bannerType").value(DEFAULT_BANNER_TYPE.toString()))
+            .andExpect(jsonPath("$.activate").value(DEFAULT_ACTIVATE.booleanValue()));
     }
 
     @Test
@@ -203,7 +229,8 @@ public class BannerTypeResourceIntTest {
         // Disconnect from session so that the updates on updatedBannerType are not directly saved in db
         em.detach(updatedBannerType);
         updatedBannerType
-            .bannerType(UPDATED_BANNER_TYPE);
+            .bannerType(UPDATED_BANNER_TYPE)
+            .activate(UPDATED_ACTIVATE);
         BannerTypeDTO bannerTypeDTO = bannerTypeMapper.toDto(updatedBannerType);
 
         restBannerTypeMockMvc.perform(put("/api/banner-types")
@@ -216,6 +243,7 @@ public class BannerTypeResourceIntTest {
         assertThat(bannerTypeList).hasSize(databaseSizeBeforeUpdate);
         BannerType testBannerType = bannerTypeList.get(bannerTypeList.size() - 1);
         assertThat(testBannerType.getBannerType()).isEqualTo(UPDATED_BANNER_TYPE);
+        assertThat(testBannerType.isActivate()).isEqualTo(UPDATED_ACTIVATE);
     }
 
     @Test

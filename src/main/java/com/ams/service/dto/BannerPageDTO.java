@@ -18,6 +18,9 @@ public class BannerPageDTO implements Serializable {
     @Size(max = 200)
     private String bannerPage;
 
+    @NotNull
+    private Boolean activate;
+
     public Long getId() {
         return id;
     }
@@ -32,6 +35,14 @@ public class BannerPageDTO implements Serializable {
 
     public void setBannerPage(String bannerPage) {
         this.bannerPage = bannerPage;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     @Override
@@ -60,6 +71,7 @@ public class BannerPageDTO implements Serializable {
         return "BannerPageDTO{" +
             "id=" + getId() +
             ", bannerPage='" + getBannerPage() + "'" +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

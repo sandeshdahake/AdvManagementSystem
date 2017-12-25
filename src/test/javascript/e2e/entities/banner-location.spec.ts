@@ -33,6 +33,15 @@ describe('BannerLocation e2e test', () => {
         bannerLocationComponentsPage.clickOnCreateButton();
         bannerLocationDialogPage.setBannerLocationInput('bannerLocation');
         expect(bannerLocationDialogPage.getBannerLocationInput()).toMatch('bannerLocation');
+        bannerLocationDialogPage.getActivateInput().isSelected().then((selected) => {
+            if (selected) {
+                bannerLocationDialogPage.getActivateInput().click();
+                expect(bannerLocationDialogPage.getActivateInput().isSelected()).toBeFalsy();
+            } else {
+                bannerLocationDialogPage.getActivateInput().click();
+                expect(bannerLocationDialogPage.getActivateInput().isSelected()).toBeTruthy();
+            }
+        });
         bannerLocationDialogPage.save();
         expect(bannerLocationDialogPage.getSaveButton().isPresent()).toBeFalsy();
     });
@@ -60,6 +69,7 @@ export class BannerLocationDialogPage {
     saveButton = element(by.css('.modal-footer .btn.btn-primary'));
     closeButton = element(by.css('button.close'));
     bannerLocationInput = element(by.css('input#field_bannerLocation'));
+    activateInput = element(by.css('input#field_activate'));
 
     getModalTitle() {
         return this.modalTitle.getText();
@@ -73,6 +83,9 @@ export class BannerLocationDialogPage {
         return this.bannerLocationInput.getAttribute('value');
     }
 
+    getActivateInput = function() {
+        return this.activateInput;
+    }
     save() {
         this.saveButton.click();
     }

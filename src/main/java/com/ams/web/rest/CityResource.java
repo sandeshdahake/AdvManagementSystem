@@ -112,6 +112,20 @@ public class CityResource {
     }
 
     /**
+     * GET  /cities : get all the cities.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of cities in body
+     */
+    @GetMapping("/cities/active")
+    @Timed
+    public ResponseEntity<List<CityDTO>> getAllActiveCities() {
+        log.debug("REST request to get a page of Cities");
+        List<CityDTO> page = cityService.findAllActive();
+        //HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities/active");
+        return new ResponseEntity<>(page, HttpStatus.OK);
+    }
+
+    /**
      * DELETE  /cities/:id : delete the "id" city.
      *
      * @param id the id of the cityDTO to delete

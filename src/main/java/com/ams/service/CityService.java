@@ -11,6 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Set;
+
 
 /**
  * Service Implementation for managing City.
@@ -78,4 +81,20 @@ public class CityService {
         log.debug("Request to delete City : {}", id);
         cityRepository.delete(id);
     }
+
+    /**
+     * Get all the cities.
+     *
+     * @param
+     *      true the boolean value for active
+     * @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public List<CityDTO> findAllActive() {
+        log.debug("Request to get all Cities");
+        Boolean isActive = true;
+       // return cityRepository.findAllByActivate(isActive)
+        return cityMapper.toDto(cityRepository.findAllByActivate(isActive));
+    }
+
 }

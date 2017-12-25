@@ -68,7 +68,7 @@ class SubscriptionPlanGatlingTest extends Simulation {
             .exec(http("Create new subscriptionPlan")
             .post("/api/subscription-plans")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "planName":"SAMPLE_TEXT", "price":"0", "maxSubscription":"0"}""")).asJSON
+            .body(StringBody("""{"id":null, "planName":"SAMPLE_TEXT", "price":"0", "maxSubscription":"0", "activate":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_subscriptionPlan_url"))).exitHereIfFailed
             .pause(10)

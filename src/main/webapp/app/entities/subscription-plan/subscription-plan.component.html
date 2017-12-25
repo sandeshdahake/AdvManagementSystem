@@ -20,6 +20,7 @@
             <th jhiSortBy="planName"><span>Plan Name</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="price"><span>Price</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="maxSubscription"><span>Max Subscription</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="activate"><span>Activate</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="bannerTypeBannerType"><span>Banner Type</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="bannerSizeBannerSize"><span>Banner Size</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="bannerLocationBannerLocation"><span>Banner Location</span> <span class="fa fa-sort"></span></th>
@@ -35,6 +36,7 @@
                 <td>{{subscriptionPlan.planName}}</td>
                 <td>{{subscriptionPlan.price}}</td>
                 <td>{{subscriptionPlan.maxSubscription}}</td>
+                <td>{{subscriptionPlan.activate}}</td>
                 <td>
                     <div *ngIf="subscriptionPlan.bannerTypeId">
                         <a [routerLink]="['../banner-type', subscriptionPlan.bannerTypeId  ]" >{{subscriptionPlan.bannerTypeBannerType}}</a>

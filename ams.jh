@@ -3,33 +3,46 @@
 
 entity Client{
 	clientName String required,
-    clientAddress TextBlob required
+    clientAddress TextBlob required,
+    activate Boolean required
 }
 entity City {
-	cityName String required
+	cityName String required,
+    activate Boolean required
 }
 entity BannerType{
-	bannerType String required maxlength(200)
+	bannerType String required maxlength(200),
+    activate Boolean required
 }
 entity BannerSize{
- bannerSize String required maxlength(200)
+ bannerSize String required maxlength(200),
+ activate Boolean required
+
 }
 entity BannerPage{
-bannerPage String required maxlength(200)
+bannerPage String required maxlength(200),
+activate Boolean required
+
 }
 entity BannerLocation{
-bannerLocation String required maxlength(200)
+bannerLocation String required maxlength(200),
+activate Boolean required
+
 }
 
 entity SubscriptionPeriod{
  periodLabel String required maxlength(200),
- subscriptionDays Integer required min(1)
+ subscriptionDays Integer required min(1),
+ activate Boolean required
+
 }
 
 entity SubscriptionPlan{
  planName String required maxlength(200),
  price BigDecimal required min(0),
- maxSubscription Integer required min(0)
+ maxSubscription Integer required min(0),
+ activate Boolean required
+
 }
 entity ClientSubscription{
  startDate LocalDate required,

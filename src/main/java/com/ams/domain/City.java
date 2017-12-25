@@ -30,6 +30,10 @@ public class City implements Serializable {
     @Column(name = "city_name", nullable = false)
     private String cityName;
 
+    @NotNull
+    @Column(name = "jhi_activate", nullable = false)
+    private Boolean activate;
+
     @OneToMany(mappedBy = "city")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -65,6 +69,19 @@ public class City implements Serializable {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public City activate(Boolean activate) {
+        this.activate = activate;
+        return this;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     public Set<SubscriptionPlan> getSubscriptionPlans() {
@@ -168,6 +185,7 @@ public class City implements Serializable {
         return "City{" +
             "id=" + getId() +
             ", cityName='" + getCityName() + "'" +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

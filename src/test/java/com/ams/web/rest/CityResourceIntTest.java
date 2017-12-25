@@ -44,6 +44,9 @@ public class CityResourceIntTest {
     private static final String DEFAULT_CITY_NAME = "AAAAAAAAAA";
     private static final String UPDATED_CITY_NAME = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_ACTIVATE = false;
+    private static final Boolean UPDATED_ACTIVATE = true;
+
     @Autowired
     private CityRepository cityRepository;
 
@@ -88,7 +91,8 @@ public class CityResourceIntTest {
      */
     public static City createEntity(EntityManager em) {
         City city = new City()
-            .cityName(DEFAULT_CITY_NAME);
+            .cityName(DEFAULT_CITY_NAME)
+            .activate(DEFAULT_ACTIVATE);
         return city;
     }
 
@@ -114,6 +118,7 @@ public class CityResourceIntTest {
         assertThat(cityList).hasSize(databaseSizeBeforeCreate + 1);
         City testCity = cityList.get(cityList.size() - 1);
         assertThat(testCity.getCityName()).isEqualTo(DEFAULT_CITY_NAME);
+        assertThat(testCity.isActivate()).isEqualTo(DEFAULT_ACTIVATE);
     }
 
     @Test
@@ -157,6 +162,25 @@ public class CityResourceIntTest {
 
     @Test
     @Transactional
+    public void checkActivateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = cityRepository.findAll().size();
+        // set the field null
+        city.setActivate(null);
+
+        // Create the City, which fails.
+        CityDTO cityDTO = cityMapper.toDto(city);
+
+        restCityMockMvc.perform(post("/api/cities")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(cityDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<City> cityList = cityRepository.findAll();
+        assertThat(cityList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllCities() throws Exception {
         // Initialize the database
         cityRepository.saveAndFlush(city);
@@ -166,7 +190,8 @@ public class CityResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(city.getId().intValue())))
-            .andExpect(jsonPath("$.[*].cityName").value(hasItem(DEFAULT_CITY_NAME.toString())));
+            .andExpect(jsonPath("$.[*].cityName").value(hasItem(DEFAULT_CITY_NAME.toString())))
+            .andExpect(jsonPath("$.[*].activate").value(hasItem(DEFAULT_ACTIVATE.booleanValue())));
     }
 
     @Test
@@ -180,7 +205,8 @@ public class CityResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(city.getId().intValue()))
-            .andExpect(jsonPath("$.cityName").value(DEFAULT_CITY_NAME.toString()));
+            .andExpect(jsonPath("$.cityName").value(DEFAULT_CITY_NAME.toString()))
+            .andExpect(jsonPath("$.activate").value(DEFAULT_ACTIVATE.booleanValue()));
     }
 
     @Test
@@ -203,7 +229,8 @@ public class CityResourceIntTest {
         // Disconnect from session so that the updates on updatedCity are not directly saved in db
         em.detach(updatedCity);
         updatedCity
-            .cityName(UPDATED_CITY_NAME);
+            .cityName(UPDATED_CITY_NAME)
+            .activate(UPDATED_ACTIVATE);
         CityDTO cityDTO = cityMapper.toDto(updatedCity);
 
         restCityMockMvc.perform(put("/api/cities")
@@ -216,6 +243,7 @@ public class CityResourceIntTest {
         assertThat(cityList).hasSize(databaseSizeBeforeUpdate);
         City testCity = cityList.get(cityList.size() - 1);
         assertThat(testCity.getCityName()).isEqualTo(UPDATED_CITY_NAME);
+        assertThat(testCity.isActivate()).isEqualTo(UPDATED_ACTIVATE);
     }
 
     @Test

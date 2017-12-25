@@ -22,6 +22,9 @@ public class ClientDTO implements Serializable {
     @Lob
     private String clientAddress;
 
+    @NotNull
+    private Boolean activate;
+
     private Set<CityDTO> cities = new HashSet<>();
 
     public Long getId() {
@@ -46,6 +49,14 @@ public class ClientDTO implements Serializable {
 
     public void setClientAddress(String clientAddress) {
         this.clientAddress = clientAddress;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     public Set<CityDTO> getCities() {
@@ -83,6 +94,7 @@ public class ClientDTO implements Serializable {
             "id=" + getId() +
             ", clientName='" + getClientName() + "'" +
             ", clientAddress='" + getClientAddress() + "'" +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

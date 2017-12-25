@@ -68,7 +68,7 @@ class BannerSizeGatlingTest extends Simulation {
             .exec(http("Create new bannerSize")
             .post("/api/banner-sizes")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "bannerSize":"SAMPLE_TEXT"}""")).asJSON
+            .body(StringBody("""{"id":null, "bannerSize":"SAMPLE_TEXT", "activate":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_bannerSize_url"))).exitHereIfFailed
             .pause(10)

@@ -44,6 +44,9 @@ public class BannerSizeResourceIntTest {
     private static final String DEFAULT_BANNER_SIZE = "AAAAAAAAAA";
     private static final String UPDATED_BANNER_SIZE = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_ACTIVATE = false;
+    private static final Boolean UPDATED_ACTIVATE = true;
+
     @Autowired
     private BannerSizeRepository bannerSizeRepository;
 
@@ -88,7 +91,8 @@ public class BannerSizeResourceIntTest {
      */
     public static BannerSize createEntity(EntityManager em) {
         BannerSize bannerSize = new BannerSize()
-            .bannerSize(DEFAULT_BANNER_SIZE);
+            .bannerSize(DEFAULT_BANNER_SIZE)
+            .activate(DEFAULT_ACTIVATE);
         return bannerSize;
     }
 
@@ -114,6 +118,7 @@ public class BannerSizeResourceIntTest {
         assertThat(bannerSizeList).hasSize(databaseSizeBeforeCreate + 1);
         BannerSize testBannerSize = bannerSizeList.get(bannerSizeList.size() - 1);
         assertThat(testBannerSize.getBannerSize()).isEqualTo(DEFAULT_BANNER_SIZE);
+        assertThat(testBannerSize.isActivate()).isEqualTo(DEFAULT_ACTIVATE);
     }
 
     @Test
@@ -157,6 +162,25 @@ public class BannerSizeResourceIntTest {
 
     @Test
     @Transactional
+    public void checkActivateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bannerSizeRepository.findAll().size();
+        // set the field null
+        bannerSize.setActivate(null);
+
+        // Create the BannerSize, which fails.
+        BannerSizeDTO bannerSizeDTO = bannerSizeMapper.toDto(bannerSize);
+
+        restBannerSizeMockMvc.perform(post("/api/banner-sizes")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(bannerSizeDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<BannerSize> bannerSizeList = bannerSizeRepository.findAll();
+        assertThat(bannerSizeList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllBannerSizes() throws Exception {
         // Initialize the database
         bannerSizeRepository.saveAndFlush(bannerSize);
@@ -166,7 +190,8 @@ public class BannerSizeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(bannerSize.getId().intValue())))
-            .andExpect(jsonPath("$.[*].bannerSize").value(hasItem(DEFAULT_BANNER_SIZE.toString())));
+            .andExpect(jsonPath("$.[*].bannerSize").value(hasItem(DEFAULT_BANNER_SIZE.toString())))
+            .andExpect(jsonPath("$.[*].activate").value(hasItem(DEFAULT_ACTIVATE.booleanValue())));
     }
 
     @Test
@@ -180,7 +205,8 @@ public class BannerSizeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(bannerSize.getId().intValue()))
-            .andExpect(jsonPath("$.bannerSize").value(DEFAULT_BANNER_SIZE.toString()));
+            .andExpect(jsonPath("$.bannerSize").value(DEFAULT_BANNER_SIZE.toString()))
+            .andExpect(jsonPath("$.activate").value(DEFAULT_ACTIVATE.booleanValue()));
     }
 
     @Test
@@ -203,7 +229,8 @@ public class BannerSizeResourceIntTest {
         // Disconnect from session so that the updates on updatedBannerSize are not directly saved in db
         em.detach(updatedBannerSize);
         updatedBannerSize
-            .bannerSize(UPDATED_BANNER_SIZE);
+            .bannerSize(UPDATED_BANNER_SIZE)
+            .activate(UPDATED_ACTIVATE);
         BannerSizeDTO bannerSizeDTO = bannerSizeMapper.toDto(updatedBannerSize);
 
         restBannerSizeMockMvc.perform(put("/api/banner-sizes")
@@ -216,6 +243,7 @@ public class BannerSizeResourceIntTest {
         assertThat(bannerSizeList).hasSize(databaseSizeBeforeUpdate);
         BannerSize testBannerSize = bannerSizeList.get(bannerSizeList.size() - 1);
         assertThat(testBannerSize.getBannerSize()).isEqualTo(UPDATED_BANNER_SIZE);
+        assertThat(testBannerSize.isActivate()).isEqualTo(UPDATED_ACTIVATE);
     }
 
     @Test

@@ -57,6 +57,9 @@ public class SubscriptionPlanResourceIntTest {
     private static final Integer DEFAULT_MAX_SUBSCRIPTION = 0;
     private static final Integer UPDATED_MAX_SUBSCRIPTION = 1;
 
+    private static final Boolean DEFAULT_ACTIVATE = false;
+    private static final Boolean UPDATED_ACTIVATE = true;
+
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
 
@@ -103,7 +106,8 @@ public class SubscriptionPlanResourceIntTest {
         SubscriptionPlan subscriptionPlan = new SubscriptionPlan()
             .planName(DEFAULT_PLAN_NAME)
             .price(DEFAULT_PRICE)
-            .maxSubscription(DEFAULT_MAX_SUBSCRIPTION);
+            .maxSubscription(DEFAULT_MAX_SUBSCRIPTION)
+            .activate(DEFAULT_ACTIVATE);
         // Add required entity
         BannerType bannerType = BannerTypeResourceIntTest.createEntity(em);
         em.persist(bannerType);
@@ -161,6 +165,7 @@ public class SubscriptionPlanResourceIntTest {
         assertThat(testSubscriptionPlan.getPlanName()).isEqualTo(DEFAULT_PLAN_NAME);
         assertThat(testSubscriptionPlan.getPrice()).isEqualTo(DEFAULT_PRICE);
         assertThat(testSubscriptionPlan.getMaxSubscription()).isEqualTo(DEFAULT_MAX_SUBSCRIPTION);
+        assertThat(testSubscriptionPlan.isActivate()).isEqualTo(DEFAULT_ACTIVATE);
     }
 
     @Test
@@ -242,6 +247,25 @@ public class SubscriptionPlanResourceIntTest {
 
     @Test
     @Transactional
+    public void checkActivateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = subscriptionPlanRepository.findAll().size();
+        // set the field null
+        subscriptionPlan.setActivate(null);
+
+        // Create the SubscriptionPlan, which fails.
+        SubscriptionPlanDTO subscriptionPlanDTO = subscriptionPlanMapper.toDto(subscriptionPlan);
+
+        restSubscriptionPlanMockMvc.perform(post("/api/subscription-plans")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(subscriptionPlanDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<SubscriptionPlan> subscriptionPlanList = subscriptionPlanRepository.findAll();
+        assertThat(subscriptionPlanList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllSubscriptionPlans() throws Exception {
         // Initialize the database
         subscriptionPlanRepository.saveAndFlush(subscriptionPlan);
@@ -253,7 +277,8 @@ public class SubscriptionPlanResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(subscriptionPlan.getId().intValue())))
             .andExpect(jsonPath("$.[*].planName").value(hasItem(DEFAULT_PLAN_NAME.toString())))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())))
-            .andExpect(jsonPath("$.[*].maxSubscription").value(hasItem(DEFAULT_MAX_SUBSCRIPTION)));
+            .andExpect(jsonPath("$.[*].maxSubscription").value(hasItem(DEFAULT_MAX_SUBSCRIPTION)))
+            .andExpect(jsonPath("$.[*].activate").value(hasItem(DEFAULT_ACTIVATE.booleanValue())));
     }
 
     @Test
@@ -269,7 +294,8 @@ public class SubscriptionPlanResourceIntTest {
             .andExpect(jsonPath("$.id").value(subscriptionPlan.getId().intValue()))
             .andExpect(jsonPath("$.planName").value(DEFAULT_PLAN_NAME.toString()))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.intValue()))
-            .andExpect(jsonPath("$.maxSubscription").value(DEFAULT_MAX_SUBSCRIPTION));
+            .andExpect(jsonPath("$.maxSubscription").value(DEFAULT_MAX_SUBSCRIPTION))
+            .andExpect(jsonPath("$.activate").value(DEFAULT_ACTIVATE.booleanValue()));
     }
 
     @Test
@@ -294,7 +320,8 @@ public class SubscriptionPlanResourceIntTest {
         updatedSubscriptionPlan
             .planName(UPDATED_PLAN_NAME)
             .price(UPDATED_PRICE)
-            .maxSubscription(UPDATED_MAX_SUBSCRIPTION);
+            .maxSubscription(UPDATED_MAX_SUBSCRIPTION)
+            .activate(UPDATED_ACTIVATE);
         SubscriptionPlanDTO subscriptionPlanDTO = subscriptionPlanMapper.toDto(updatedSubscriptionPlan);
 
         restSubscriptionPlanMockMvc.perform(put("/api/subscription-plans")
@@ -309,6 +336,7 @@ public class SubscriptionPlanResourceIntTest {
         assertThat(testSubscriptionPlan.getPlanName()).isEqualTo(UPDATED_PLAN_NAME);
         assertThat(testSubscriptionPlan.getPrice()).isEqualTo(UPDATED_PRICE);
         assertThat(testSubscriptionPlan.getMaxSubscription()).isEqualTo(UPDATED_MAX_SUBSCRIPTION);
+        assertThat(testSubscriptionPlan.isActivate()).isEqualTo(UPDATED_ACTIVATE);
     }
 
     @Test

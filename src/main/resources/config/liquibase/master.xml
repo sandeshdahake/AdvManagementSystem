@@ -14,9 +14,12 @@
     <include file="config/liquibase/changelog/20171223202450_added_entity_SubscriptionPeriod.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20171223202451_added_entity_SubscriptionPlan.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20171223202452_added_entity_ClientSubscription.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000000_ams_data_load.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20171222214020_added_entity_constraints_Client.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20171223202451_added_entity_constraints_SubscriptionPlan.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20171223202452_added_entity_constraints_ClientSubscription.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+
 </databaseChangeLog>
+

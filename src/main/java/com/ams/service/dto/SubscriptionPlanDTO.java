@@ -27,6 +27,9 @@ public class SubscriptionPlanDTO implements Serializable {
     @Min(value = 0)
     private Integer maxSubscription;
 
+    @NotNull
+    private Boolean activate;
+
     private Long bannerTypeId;
 
     private String bannerTypeBannerType;
@@ -81,6 +84,14 @@ public class SubscriptionPlanDTO implements Serializable {
 
     public void setMaxSubscription(Integer maxSubscription) {
         this.maxSubscription = maxSubscription;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     public Long getBannerTypeId() {
@@ -207,6 +218,7 @@ public class SubscriptionPlanDTO implements Serializable {
             ", planName='" + getPlanName() + "'" +
             ", price=" + getPrice() +
             ", maxSubscription=" + getMaxSubscription() +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

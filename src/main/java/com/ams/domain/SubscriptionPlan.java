@@ -42,6 +42,10 @@ public class SubscriptionPlan implements Serializable {
     @Column(name = "max_subscription", nullable = false)
     private Integer maxSubscription;
 
+    @NotNull
+    @Column(name = "jhi_activate", nullable = false)
+    private Boolean activate;
+
     @ManyToOne(optional = false)
     @NotNull
     private BannerType bannerType;
@@ -117,6 +121,19 @@ public class SubscriptionPlan implements Serializable {
 
     public void setMaxSubscription(Integer maxSubscription) {
         this.maxSubscription = maxSubscription;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public SubscriptionPlan activate(Boolean activate) {
+        this.activate = activate;
+        return this;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     public BannerType getBannerType() {
@@ -250,6 +267,7 @@ public class SubscriptionPlan implements Serializable {
             ", planName='" + getPlanName() + "'" +
             ", price=" + getPrice() +
             ", maxSubscription=" + getMaxSubscription() +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

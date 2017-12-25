@@ -37,6 +37,15 @@ describe('Client e2e test', () => {
         expect(clientDialogPage.getClientNameInput()).toMatch('clientName');
         clientDialogPage.setClientAddressInput('clientAddress');
         expect(clientDialogPage.getClientAddressInput()).toMatch('clientAddress');
+        clientDialogPage.getActivateInput().isSelected().then((selected) => {
+            if (selected) {
+                clientDialogPage.getActivateInput().click();
+                expect(clientDialogPage.getActivateInput().isSelected()).toBeFalsy();
+            } else {
+                clientDialogPage.getActivateInput().click();
+                expect(clientDialogPage.getActivateInput().isSelected()).toBeTruthy();
+            }
+        });
         // clientDialogPage.citySelectLastOption();
         clientDialogPage.save();
         expect(clientDialogPage.getSaveButton().isPresent()).toBeFalsy();
@@ -66,6 +75,7 @@ export class ClientDialogPage {
     closeButton = element(by.css('button.close'));
     clientNameInput = element(by.css('input#field_clientName'));
     clientAddressInput = element(by.css('textarea#field_clientAddress'));
+    activateInput = element(by.css('input#field_activate'));
     citySelect = element(by.css('select#field_city'));
 
     getModalTitle() {
@@ -88,6 +98,9 @@ export class ClientDialogPage {
         return this.clientAddressInput.getAttribute('value');
     }
 
+    getActivateInput = function() {
+        return this.activateInput;
+    }
     citySelectLastOption = function() {
         this.citySelect.all(by.tagName('option')).last().click();
     }

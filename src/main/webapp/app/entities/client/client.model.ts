@@ -5,8 +5,10 @@ export class Client implements BaseEntity {
         public id?: number,
         public clientName?: string,
         public clientAddress?: any,
+        public activate?: boolean,
         public cities?: BaseEntity[],
         public subscriptions?: BaseEntity[],
     ) {
+        this.activate = false;
     }
 }

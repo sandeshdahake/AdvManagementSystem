@@ -27,6 +27,17 @@
                 </small>
             </div>
         </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_activate">Activate</label>
+            <input type="checkbox" class="form-control" name="activate" id="field_activate"
+                [(ngModel)]="bannerLocation.activate" />
+            <div [hidden]="!(editForm.controls.activate?.dirty && editForm.controls.activate?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.activate?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
 
     </div>
     <div class="modal-footer">

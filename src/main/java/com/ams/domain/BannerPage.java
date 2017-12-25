@@ -31,6 +31,10 @@ public class BannerPage implements Serializable {
     @Column(name = "banner_page", length = 200, nullable = false)
     private String bannerPage;
 
+    @NotNull
+    @Column(name = "jhi_activate", nullable = false)
+    private Boolean activate;
+
     @OneToMany(mappedBy = "bannerPage")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -56,6 +60,19 @@ public class BannerPage implements Serializable {
 
     public void setBannerPage(String bannerPage) {
         this.bannerPage = bannerPage;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public BannerPage activate(Boolean activate) {
+        this.activate = activate;
+        return this;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     public Set<SubscriptionPlan> getSubscriptionPlans() {
@@ -109,6 +126,7 @@ public class BannerPage implements Serializable {
         return "BannerPage{" +
             "id=" + getId() +
             ", bannerPage='" + getBannerPage() + "'" +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

@@ -22,6 +22,9 @@ public class SubscriptionPeriodDTO implements Serializable {
     @Min(value = 1)
     private Integer subscriptionDays;
 
+    @NotNull
+    private Boolean activate;
+
     public Long getId() {
         return id;
     }
@@ -44,6 +47,14 @@ public class SubscriptionPeriodDTO implements Serializable {
 
     public void setSubscriptionDays(Integer subscriptionDays) {
         this.subscriptionDays = subscriptionDays;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     @Override
@@ -73,6 +84,7 @@ public class SubscriptionPeriodDTO implements Serializable {
             "id=" + getId() +
             ", periodLabel='" + getPeriodLabel() + "'" +
             ", subscriptionDays=" + getSubscriptionDays() +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

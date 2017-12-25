@@ -18,6 +18,9 @@ public class BannerLocationDTO implements Serializable {
     @Size(max = 200)
     private String bannerLocation;
 
+    @NotNull
+    private Boolean activate;
+
     public Long getId() {
         return id;
     }
@@ -32,6 +35,14 @@ public class BannerLocationDTO implements Serializable {
 
     public void setBannerLocation(String bannerLocation) {
         this.bannerLocation = bannerLocation;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     @Override
@@ -60,6 +71,7 @@ public class BannerLocationDTO implements Serializable {
         return "BannerLocationDTO{" +
             "id=" + getId() +
             ", bannerLocation='" + getBannerLocation() + "'" +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

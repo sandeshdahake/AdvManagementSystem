@@ -35,6 +35,15 @@ describe('SubscriptionPeriod e2e test', () => {
         expect(subscriptionPeriodDialogPage.getPeriodLabelInput()).toMatch('periodLabel');
         subscriptionPeriodDialogPage.setSubscriptionDaysInput('5');
         expect(subscriptionPeriodDialogPage.getSubscriptionDaysInput()).toMatch('5');
+        subscriptionPeriodDialogPage.getActivateInput().isSelected().then((selected) => {
+            if (selected) {
+                subscriptionPeriodDialogPage.getActivateInput().click();
+                expect(subscriptionPeriodDialogPage.getActivateInput().isSelected()).toBeFalsy();
+            } else {
+                subscriptionPeriodDialogPage.getActivateInput().click();
+                expect(subscriptionPeriodDialogPage.getActivateInput().isSelected()).toBeTruthy();
+            }
+        });
         subscriptionPeriodDialogPage.save();
         expect(subscriptionPeriodDialogPage.getSaveButton().isPresent()).toBeFalsy();
     });
@@ -63,6 +72,7 @@ export class SubscriptionPeriodDialogPage {
     closeButton = element(by.css('button.close'));
     periodLabelInput = element(by.css('input#field_periodLabel'));
     subscriptionDaysInput = element(by.css('input#field_subscriptionDays'));
+    activateInput = element(by.css('input#field_activate'));
 
     getModalTitle() {
         return this.modalTitle.getText();
@@ -84,6 +94,9 @@ export class SubscriptionPeriodDialogPage {
         return this.subscriptionDaysInput.getAttribute('value');
     }
 
+    getActivateInput = function() {
+        return this.activateInput;
+    }
     save() {
         this.saveButton.click();
     }

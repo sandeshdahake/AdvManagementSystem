@@ -5,7 +5,9 @@ export class SubscriptionPeriod implements BaseEntity {
         public id?: number,
         public periodLabel?: string,
         public subscriptionDays?: number,
+        public activate?: boolean,
         public subscriptionPlans?: BaseEntity[],
     ) {
+        this.activate = false;
     }
 }

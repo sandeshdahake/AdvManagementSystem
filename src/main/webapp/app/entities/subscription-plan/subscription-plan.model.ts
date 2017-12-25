@@ -6,6 +6,7 @@ export class SubscriptionPlan implements BaseEntity {
         public planName?: string,
         public price?: number,
         public maxSubscription?: number,
+        public activate?: boolean,
         public bannerTypeId?: number,
         public bannerSizeId?: number,
         public bannerLocationId?: number,
@@ -14,5 +15,6 @@ export class SubscriptionPlan implements BaseEntity {
         public cityId?: number,
         public subscriptions?: BaseEntity[],
     ) {
+        this.activate = false;
     }
 }

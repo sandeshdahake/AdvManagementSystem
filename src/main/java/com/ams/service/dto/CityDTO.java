@@ -17,6 +17,9 @@ public class CityDTO implements Serializable {
     @NotNull
     private String cityName;
 
+    @NotNull
+    private Boolean activate;
+
     public Long getId() {
         return id;
     }
@@ -31,6 +34,14 @@ public class CityDTO implements Serializable {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     @Override
@@ -59,6 +70,7 @@ public class CityDTO implements Serializable {
         return "CityDTO{" +
             "id=" + getId() +
             ", cityName='" + getCityName() + "'" +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

@@ -68,7 +68,7 @@ class SubscriptionPeriodGatlingTest extends Simulation {
             .exec(http("Create new subscriptionPeriod")
             .post("/api/subscription-periods")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "periodLabel":"SAMPLE_TEXT", "subscriptionDays":"0"}""")).asJSON
+            .body(StringBody("""{"id":null, "periodLabel":"SAMPLE_TEXT", "subscriptionDays":"0", "activate":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_subscriptionPeriod_url"))).exitHereIfFailed
             .pause(10)

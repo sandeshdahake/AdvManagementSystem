@@ -31,6 +31,10 @@ public class BannerLocation implements Serializable {
     @Column(name = "banner_location", length = 200, nullable = false)
     private String bannerLocation;
 
+    @NotNull
+    @Column(name = "jhi_activate", nullable = false)
+    private Boolean activate;
+
     @OneToMany(mappedBy = "bannerLocation")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -56,6 +60,19 @@ public class BannerLocation implements Serializable {
 
     public void setBannerLocation(String bannerLocation) {
         this.bannerLocation = bannerLocation;
+    }
+
+    public Boolean isActivate() {
+        return activate;
+    }
+
+    public BannerLocation activate(Boolean activate) {
+        this.activate = activate;
+        return this;
+    }
+
+    public void setActivate(Boolean activate) {
+        this.activate = activate;
     }
 
     public Set<SubscriptionPlan> getSubscriptionPlans() {
@@ -109,6 +126,7 @@ public class BannerLocation implements Serializable {
         return "BannerLocation{" +
             "id=" + getId() +
             ", bannerLocation='" + getBannerLocation() + "'" +
+            ", activate='" + isActivate() + "'" +
             "}";
     }
 }

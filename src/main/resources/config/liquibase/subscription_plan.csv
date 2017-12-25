@@ -1,0 +1,4 @@
+id;plan_name;price;max_subscription;jhi_activate;banner_type_id;banner_size_id;banner_page_id;banner_location_id;subscription_period_id;city_id
+1;Pi1;100;3;1;1;1;1;1;1;1
+2;Pi2;100;3;1;2;2;2;2;2;2
+

@@ -68,7 +68,7 @@ class BannerLocationGatlingTest extends Simulation {
             .exec(http("Create new bannerLocation")
             .post("/api/banner-locations")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "bannerLocation":"SAMPLE_TEXT"}""")).asJSON
+            .body(StringBody("""{"id":null, "bannerLocation":"SAMPLE_TEXT", "activate":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_bannerLocation_url"))).exitHereIfFailed
             .pause(10)
