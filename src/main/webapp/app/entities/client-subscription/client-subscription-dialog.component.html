@@ -12,6 +12,46 @@
             <input type="text" class="form-control" id="id" name="id"
                    [(ngModel)]="clientSubscription.id" readonly />
         </div>
+
+        <div class="form-group">
+            <label class="form-control-label" for="field_city">City</label>
+            <select class="form-control" id="field_city" name="city" [(ngModel)]="clientSubscription.cityId"  required>
+                <option *ngIf="!editForm.value.city" [ngValue]="null" selected></option>
+                <option [ngValue]="cityOption.id" *ngFor="let cityOption of cities; trackBy: trackCityById">{{cityOption.cityName}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.city?.dirty && editForm.controls.city?.invalid)">
+            <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.city?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_client">Client</label>
+            <select class="form-control" id="field_client" name="client" [(ngModel)]="clientSubscription.clientId"  required>
+                <option *ngIf="!editForm.value.client" [ngValue]="null" selected></option>
+                <option [ngValue]="clientOption.id" *ngFor="let clientOption of clients; trackBy: trackClientById">{{clientOption.clientName}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.client?.dirty && editForm.controls.client?.invalid)">
+            <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.client?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_subscriptionPlan">Subscription Plan</label>
+            <select class="form-control" id="field_subscriptionPlan" name="subscriptionPlan" [(ngModel)]="clientSubscription.subscriptionPlanId"  required (change)="onPlanSelect()">
+                <option *ngIf="!editForm.value.subscriptionPlan" [ngValue]="null" selected></option>
+                <option [ngValue]="subscriptionPlanOption.id" *ngFor="let subscriptionPlanOption of subscriptionplans; trackBy: trackSubscriptionPlanById">{{subscriptionPlanOption.planName}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.subscriptionPlan?.dirty && editForm.controls.subscriptionPlan?.invalid)">
+            <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.subscriptionPlan?.errors?.required">
+                This field is required.
+            </small>
+        </div>
         <div class="form-group">
             <label class="form-control-label" for="field_startDate">Start Date</label>
             <div class="input-group">
@@ -63,7 +103,7 @@
         <div class="form-group">
             <label class="form-control-label" for="field_priorityPrice">Priority Price</label>
             <input type="number" class="form-control" name="priorityPrice" id="field_priorityPrice"
-                [(ngModel)]="clientSubscription.priorityPrice" min="0"/>
+                [(ngModel)]="clientSubscription.priorityPrice" min="0" (change)="calculatePrice()" />
             <div [hidden]="!(editForm.controls.priorityPrice?.dirty && editForm.controls.priorityPrice?.invalid)">
                 <small class="form-text text-danger"
                     [hidden]="!editForm.controls.priorityPrice?.errors?.min">
@@ -78,7 +118,7 @@
         <div class="form-group">
             <label class="form-control-label" for="field_discount">Discount</label>
             <input type="number" class="form-control" name="discount" id="field_discount"
-                [(ngModel)]="clientSubscription.discount" min="0"/>
+                [(ngModel)]="clientSubscription.discount" min="0" (change)="calculatePrice()"/>
             <div [hidden]="!(editForm.controls.discount?.dirty && editForm.controls.discount?.invalid)">
                 <small class="form-text text-danger"
                     [hidden]="!editForm.controls.discount?.errors?.min">
@@ -92,7 +132,7 @@
         </div>
         <div class="form-group">
             <label class="form-control-label" for="field_totalPrice">Total Price</label>
-            <input type="number" class="form-control" name="totalPrice" id="field_totalPrice"
+            <input type="number" contenteditable="false" class="form-control" name="totalPrice" id="field_totalPrice"
                 [(ngModel)]="clientSubscription.totalPrice" required min="0"/>
             <div [hidden]="!(editForm.controls.totalPrice?.dirty && editForm.controls.totalPrice?.invalid)">
                 <small class="form-text text-danger"
@@ -121,45 +161,6 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="form-control-label" for="field_city">City</label>
-            <select class="form-control" id="field_city" name="city" [(ngModel)]="clientSubscription.cityId"  required>
-                <option *ngIf="!editForm.value.city" [ngValue]="null" selected></option>
-                <option [ngValue]="cityOption.id" *ngFor="let cityOption of cities; trackBy: trackCityById">{{cityOption.cityName}}</option>
-            </select>
-        </div>
-        <div [hidden]="!(editForm.controls.city?.dirty && editForm.controls.city?.invalid)">
-            <small class="form-text text-danger"
-                [hidden]="!editForm.controls.city?.errors?.required">
-                This field is required.
-            </small>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_client">Client</label>
-            <select class="form-control" id="field_client" name="client" [(ngModel)]="clientSubscription.clientId"  required>
-                <option *ngIf="!editForm.value.client" [ngValue]="null" selected></option>
-                <option [ngValue]="clientOption.id" *ngFor="let clientOption of clients; trackBy: trackClientById">{{clientOption.clientName}}</option>
-            </select>
-        </div>
-        <div [hidden]="!(editForm.controls.client?.dirty && editForm.controls.client?.invalid)">
-            <small class="form-text text-danger"
-                [hidden]="!editForm.controls.client?.errors?.required">
-                This field is required.
-            </small>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_subscriptionPlan">Subscription Plan</label>
-            <select class="form-control" id="field_subscriptionPlan" name="subscriptionPlan" [(ngModel)]="clientSubscription.subscriptionPlanId"  required>
-                <option *ngIf="!editForm.value.subscriptionPlan" [ngValue]="null" selected></option>
-                <option [ngValue]="subscriptionPlanOption.id" *ngFor="let subscriptionPlanOption of subscriptionplans; trackBy: trackSubscriptionPlanById">{{subscriptionPlanOption.planName}}</option>
-            </select>
-        </div>
-        <div [hidden]="!(editForm.controls.subscriptionPlan?.dirty && editForm.controls.subscriptionPlan?.invalid)">
-            <small class="form-text text-danger"
-                [hidden]="!editForm.controls.subscriptionPlan?.errors?.required">
-                This field is required.
-            </small>
-        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">

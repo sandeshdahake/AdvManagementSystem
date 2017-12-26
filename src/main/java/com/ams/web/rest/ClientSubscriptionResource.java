@@ -54,7 +54,7 @@ public class ClientSubscriptionResource {
         if (clientSubscriptionDTO.getId() != null) {
             throw new BadRequestAlertException("A new clientSubscription cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ClientSubscriptionDTO result = clientSubscriptionService.save(clientSubscriptionDTO);
+        ClientSubscriptionDTO result = clientSubscriptionService.save(clientSubscriptionDTO,false);
         return ResponseEntity.created(new URI("/api/client-subscriptions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,7 +76,7 @@ public class ClientSubscriptionResource {
         if (clientSubscriptionDTO.getId() == null) {
             return createClientSubscription(clientSubscriptionDTO);
         }
-        ClientSubscriptionDTO result = clientSubscriptionService.save(clientSubscriptionDTO);
+        ClientSubscriptionDTO result = clientSubscriptionService.save(clientSubscriptionDTO, true);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, clientSubscriptionDTO.getId().toString()))
             .body(result);

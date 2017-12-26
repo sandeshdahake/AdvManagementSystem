@@ -1,9 +1,14 @@
 package com.ams.service;
 
+import com.ams.domain.City;
 import com.ams.domain.ClientSubscription;
+import com.ams.domain.SubscriptionPlan;
+import com.ams.repository.CityRepository;
 import com.ams.repository.ClientSubscriptionRepository;
+import com.ams.repository.SubscriptionPlanRepository;
 import com.ams.service.dto.ClientSubscriptionDTO;
 import com.ams.service.mapper.ClientSubscriptionMapper;
+import com.ams.web.rest.errors.MaxSubscriptionReachedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,12 +29,16 @@ public class ClientSubscriptionService {
     private final Logger log = LoggerFactory.getLogger(ClientSubscriptionService.class);
 
     private final ClientSubscriptionRepository clientSubscriptionRepository;
-
+    private final SubscriptionPlanRepository subscriptionPlanRepository;
+    private final CityRepository cityRepository;
     private final ClientSubscriptionMapper clientSubscriptionMapper;
 
-    public ClientSubscriptionService(ClientSubscriptionRepository clientSubscriptionRepository, ClientSubscriptionMapper clientSubscriptionMapper) {
+    public ClientSubscriptionService(ClientSubscriptionRepository clientSubscriptionRepository, ClientSubscriptionMapper clientSubscriptionMapper
+        , SubscriptionPlanRepository subscriptionPlanRepository, CityRepository cityRepository) {
         this.clientSubscriptionRepository = clientSubscriptionRepository;
         this.clientSubscriptionMapper = clientSubscriptionMapper;
+        this.subscriptionPlanRepository = subscriptionPlanRepository;
+        this.cityRepository = cityRepository;
     }
 
     /**
@@ -38,11 +47,19 @@ public class ClientSubscriptionService {
      * @param clientSubscriptionDTO the entity to save
      * @return the persisted entity
      */
-    public ClientSubscriptionDTO save(ClientSubscriptionDTO clientSubscriptionDTO) {
+    public ClientSubscriptionDTO save(ClientSubscriptionDTO clientSubscriptionDTO, boolean isUpdate){
         log.debug("Request to save ClientSubscription : {}", clientSubscriptionDTO);
         ClientSubscription clientSubscription = clientSubscriptionMapper.toEntity(clientSubscriptionDTO);
-        clientSubscription = clientSubscriptionRepository.save(clientSubscription);
-        return clientSubscriptionMapper.toDto(clientSubscription);
+        City city = cityRepository.findOne(clientSubscriptionDTO.getCityId());
+       SubscriptionPlan plan = subscriptionPlanRepository.findOne(clientSubscriptionDTO.getSubscriptionPlanId());
+
+        List<ClientSubscriptionDTO> listOfSubscription  = this.findAllByCityByPlan(city.getCityName(), plan.getPlanName());
+        if(listOfSubscription.size() < plan.getMaxSubscription() || isUpdate){
+            clientSubscription = clientSubscriptionRepository.save(clientSubscription);
+            return clientSubscriptionMapper.toDto(clientSubscription);
+        }else{
+            throw new MaxSubscriptionReachedException();
+        }
     }
 
     /**
@@ -92,3 +109,4 @@ public class ClientSubscriptionService {
         return clientSubscriptionRepository.findUrlByCityNameByPlanName(cityName, planName);
     }
 }
+//abstract.

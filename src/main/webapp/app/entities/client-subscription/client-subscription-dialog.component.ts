@@ -26,7 +26,7 @@ export class ClientSubscriptionDialogComponent implements OnInit {
     cities: City[];
 
     clients: Client[];
-
+    selectPlan:SubscriptionPlan;
     subscriptionplans: SubscriptionPlan[];
     startDateDp: any;
     endDateDp: any;
@@ -50,6 +50,9 @@ export class ClientSubscriptionDialogComponent implements OnInit {
             .subscribe((res: ResponseWrapper) => { this.clients = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
         this.subscriptionPlanService.query()
             .subscribe((res: ResponseWrapper) => { this.subscriptionplans = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.clientSubscription.priorityPrice =0;
+        this.clientSubscription.discount =0;
+        this.selectPlan = null;
     }
 
     clear() {
@@ -96,6 +99,16 @@ export class ClientSubscriptionDialogComponent implements OnInit {
 
     trackSubscriptionPlanById(index: number, item: SubscriptionPlan) {
         return item.id;
+    }
+    calculatePrice(){
+        this.clientSubscription.totalPrice = this.selectPlan.price + this.clientSubscription.priorityPrice - this.clientSubscription.discount;
+    }
+    onPlanSelect(){
+        this.subscriptionPlanService.find(this.clientSubscription.subscriptionPlanId).subscribe((selectPlan ) => {
+            this.selectPlan = selectPlan;
+            this.calculatePrice()
+        });
+
     }
 }
 
