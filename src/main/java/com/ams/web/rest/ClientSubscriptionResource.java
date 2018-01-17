@@ -140,7 +140,7 @@ public class ClientSubscriptionResource {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/client-subscriptions/url/{cityName}/{planName}")
+    @GetMapping("/client-subscriptions/widget/{cityName}/{planName}")
     @Timed
     public ResponseEntity<List<Object>> findUrlByCityNameByPlanName(@PathVariable String cityName, @PathVariable String  planName ) {
         log.debug("REST request to get a list of  ClientSubscriptions for widgets");
